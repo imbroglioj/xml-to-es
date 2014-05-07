@@ -1,0 +1,23 @@
+{
+  "name": "xml-to-es",
+  "version": "0.1.0",
+  "description": "Translates XML (or reasonable SGML) input into a json document suitable for elasticsearch",
+  "main": "xml-to-es.js",
+  "dependencies": {
+    "libxml-to-js": "~0.3.11",
+    "optimist": "~0.6.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "node xml-to-es test/data/test.sgm --properties lewis-properties.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "keywords": [
+    "elasticsearch, xml, sgml"
+  ],
+  "author": "John Broglio",
+  "license": "Apache 2"
+}
