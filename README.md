@@ -3,6 +3,10 @@
 Takes XML input and translates it into JSON suitable for elasticsearch. There is also an HTML output option suitable
 for Chiliad Discovery.
 
+This uses libxml-to-js (and the underlying libxmljs) and then massages the resulting JSON object to make it
+meaningful for search engines. Elasticsearch can handle nested JSON, but the nested JSON from xml/sgml is not
+always what you want to index.
+
 ## Usage
     node xml-to-es.js XML_FILE --properties PROPERTIES_FILE [--level LOGLEVEL]
 
@@ -12,7 +16,7 @@ for Chiliad Discovery.
 ## Testing
 
 Currently:
-    node xml-to-js test/data/test.sgm --properties lewis-properties.js
+    node xml-to-js test/data/test.sgm --properties lewis-config.js
 
 ## Notes:
 

@@ -10,16 +10,40 @@
 exports.HtmlGenerator = function(fs, util, log){
     var self=this;
 
-    self.generate=function(outputStream, json, bodyKey){
-        outputStream.write("<HTML>\n<head><title>json.id</title>\n");
+    self.generate=function(outputStream, json, config){
+        var bodyKey = config.bodyKey;
+        outputStream.write(util.format("<HTML>\n<head><title>%s</title>\n", json.id));
         Object.keys(json).forEach(function(key){
             if (key != bodyKey){
-                outputStream.write(util.format('<META name="%s" content="%s">\n', key, json[key]));
+                var val = json[key];
+                try {
+                    if (Array.isArray(val)){
+                        return outputStream.write(util.format('<META name="%s" content="%s">\n', key,
+                            val.join(',').replace(/[\n\f\r]/gm, ' ')));
+                    }
+                    if (typeof val === 'object') {
+                        if (!config.skipObjectFields) {
+                            Object.keys(val).forEach(function (k) {
+                                var val2 = val[k];
+                                if (typeof val2 === 'object') val2 = JSON.stringify(val2);
+                                outputStream.write(util.format('<META name="%s" content="%s">\n', key + '.' + k,
+                                    val2.replace(/[\n\f\r]/gm, ' ')));
+                            })
+                        }
+                        return;
+                    } else
+                        return outputStream.write(util.format('<META name="%s" content="%s">\n', key,
+                            val.replace(/[\n\f\r]/gm, ' ')));
+                } catch (err){
+                    console.error(util.format('generate.js:html: %s\n  %s\nAT:%s FROM:%s', err, (err.stack? err.stack:''),
+                        key, json[key], util.inspect(json, {depth:2})));
+                }
             }
-        })
+        });
         outputStream.write('</head>\n<body>\n');
-        if (bodyKey) outputStream.write(json[bodyKey]);
-        outputStream.end('\n</body>\n</HTML>\n');
+        if (bodyKey && json[bodyKey]) outputStream.write(json[bodyKey]);
+        outputStream.write('\n</body>\n</HTML>\n');
+        outputStream.end();
     };
 };
 
@@ -27,6 +51,7 @@ exports.JsonGenerator = function(fs, util, log){
     var self=this;
 
     self.generate = function(outputStream, json){
-        outputStream.end(util.format("%j", json));
+        outputStream.write(util.format("%j", json));
+        outputStream.end();
     }
 };
