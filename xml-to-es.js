@@ -8,6 +8,7 @@
  * Time: 10:30 AM
  */
 
+require('string_score');
 
 var //mongo = require('mongoskin'),
     util = require('util'),
@@ -20,13 +21,14 @@ var //mongo = require('mongoskin'),
     generator = require('./generator.js'),
     htmlGenerator = new generator.HtmlGenerator(fs, util, logger),
     jsonGenerator = new generator.JsonGenerator(fs, util, logger),
-    fuzzy = require('string_score'),
+    ha = require('./handleAnomalies.js'),
     argv = require('optimist')
         .usage('USAGE: $0 INPUT_FILE --config PATH_TO_PROPERTIES_JS [--level LOGLEVEL]')
         .demand([1, 'config'])
         .string('config')
         .argv
 ;
+
 
 function apush(json, key, val) {
     if (json[key]) {
@@ -37,23 +39,6 @@ function apush(json, key, val) {
     }
 }
 
-function apushSet(json, key, val) {
-    if (json[key] && json[key].indexOf(val) >= 0) {
-        return false;
-    }
-    else {
-        apush(json, key, val);
-        return true;
-    }
-}
-
-function handleArray(cl, owlKey, json, key) {
-    var owl = cl[owlKey];
-    if (owl && owl.length) {
-
-        owl.forEach(function (x) {apush(json, key, x['#'])});
-    }
-}
 
 if (!Array.prototype['contains']) {
     Object.defineProperty(Array.prototype, 'contains', {value: function (item) {return this.indexOf(item) >= 0}});
@@ -109,26 +94,26 @@ function handleFields(result, cb) {
     lowerCaseKeys(result);
     try {
         // promotions
-        Object.keys(result).forEach(function (key) {
+        Object.keys(result).forEach(function (parent) {
             // promote[key] : [..]
-            if (promote[key]) {
+            if (promote[parent]) {
                 // travel array
-                promote[key].forEach(function (pkey) {
+                promote[parent].forEach(function (pkey) {
                     var target = pkey;
                     if (typeof pkey === 'object') {
                         target = pkey.target;
                         pkey = pkey.key;
                     }
-                    var value = result[key][pkey];
+                    var value = result[parent][pkey];
                     if (!value) return;
 
                     if (result[target]) {
                         log.warn("Promoting %s.%s:%s clobbers %s:%s. Clobbering now.",
-                            key, pkey, value,
+                            parent, pkey, value,
                             target, result[target]);
                     }
                     result[target] = value;
-                    delete result[key][pkey];
+                    delete result[parent][pkey];
                 });
             }
         });
@@ -156,6 +141,50 @@ function handleFields(result, cb) {
 
 };
 
+
+
+
+function processGoodDoc(teRegex, s, strings, eltClose, cb) {
+    teRegex.lastIndex=0;
+    var ix = teRegex.exec(s).index;
+    if (ix > 0) {
+        logger.warn("Discarding garbage from before start of doc: %s", s.substring(0, ix));
+        s = s.substring(ix);
+        // now reset the regex starting point
+        teRegex.lastIndex = 0;
+        teRegex.test(s);
+    }
+
+
+    var newStrings = ha.splitForBadDocumentClose(s, topElement, teRegex, strings);
+    if (newStrings && newStrings.length) {
+        // put docs in in correct order
+        for (var i=newStrings.length-1; i>=0; i--) strings.unshift(newStrings[i]);
+        // leave and process prepended strings
+        return cb ? setImmediate(cb) : null;
+    }
+
+    s = ha.handleUnclosedQuotes(s);
+    // replace junky ampersand chars; todo: Should we replace these with utf8???
+    s = s.replace(/&#[0-9]+;/g, '');
+    // now add the close element, since we stripped it out previously with xml.split
+    s += eltClose;
+
+    try {
+        parser(s, function (err, x) {
+            if (err) {
+                logger.error("Parse error processing string: %s\n", s, err);
+                return cb ? setImmediate(cb) : null;
+            } else
+                handleFields(x, cb);
+        });
+    } catch (err) {
+        logger.error("Processing string: %s\n", s, err);
+        return cb ? setImmediate(cb) : null;
+    }
+}
+
+
 function processXmlGroup(xml) {
     logger.trace("going to parse now");
     var doctype = xml.match(doctypeRegex);
@@ -165,86 +194,21 @@ function processXmlGroup(xml) {
         throw new Error("malformed xml: no topElement: " + xml.substring(0, 50));
     }
     topElement = tmp[1]; // group
-    var teRegex = new RegExp('<' + topElement, 'igm');
     var eltClose = '</' + topElement + '>';
     var strings = xml.split(eltClose);
     var doneOne = false;
 
     function oneDoc() {
+        var teRegex = new RegExp('<' + topElement, 'igm');
         if (!strings || !strings.length) return;
         var s = strings.shift().trim();
 
         if (s && teRegex.test(s)) {
             doneOne = true;
-            var step = topElement.length + 2;
-            teRegex.lastIndex = 0;
-            var tmp = teRegex.exec(s);
-            if (tmp.index > 0){
-                logger.warn("Discarding garbage from before start of doc: %s", s.substring(0,tmp.index));
-                s = s.substring(tmp.index);
-            }
-            var currentIndex = 0;
-            tmp = teRegex.exec(s);
-            if (tmp) {
-                var newStrings = [];
-                while (tmp) { // missing end element
-                    // tmp[0] will be the empty string before "<TOPELEMENT"
-                    newStrings.unshift(s.substring(currentIndex, tmp.index));
-                    currentIndex=tmp.index;
-                    tmp = teRegex.exec(s);
-                }
-                if (newStrings && newStrings.length) {
-                    strings = newStrings.concat(strings);
-                    return setImmediate(oneDoc);
-                }
-            }
-            // handle unclosed quotes
-            var quotes = s.match(qreg);
-            var paras, index = 0;
-            if (quotes && quotes.length % 2 == 1) { //missing close quote
-                do {
-                    paras = paraq.exec(s.substring(index));
-                    if (paras) {
-                        index = paras.index;
-                        if (paras[0].match(qreg).length % 2 == 1) {
-                            // don't try to get it right, just balance the damn things.
-                            s = s.replace(paras[0], paras[0] + '"');
-                        }
-                    }
-                } while (paras);
-            }
-            s = s.replace(/&#[0-9]+;/g, '');
-            s += eltClose;
-            try {
-                parser(s, function (err, x) {
-                    if (err) {
-                        logger.error("Parse error processing string: %s\n", s, err);
-                        return setImmediate(oneDoc)
-                    } else
-                        handleFields(x, oneDoc);
-
-                });
-            } catch (err) {
-                logger.error("Processing string: %s\n", s, err);
-                setImmediate(oneDoc);
-            }
+            processGoodDoc(teRegex, s, strings, eltClose, oneDoc);
         } else {
             // what about comments?
-            if (s.length) {
-                console.error(util.format('Top element: %s not found in start of xml piece: %s.'),
-                    topElement, s.substring(0, 100));
-                if (s.length > 20) {
-                    console.error("Adding topelement marker and reprocessing");
-
-                    var loc = /^\s*<([^\s>]+)/.exec(s);
-                    if (loc.index < 10 && topElement.score(loc[1]) > .5){
-                        s = s.replace(loc[1],topElement);
-                    } else // okay just fudg it
-                        s = '<' + topElement + '>\n' + s;
-                    strings.unshift(s);
-                }
-            }
-            setImmediate(oneDoc);
+            s = ha.supplyMissingHeadElement(s, topElement, strings, oneDoc);
         }
     }
 
@@ -252,9 +216,6 @@ function processXmlGroup(xml) {
 }
 var vacuousKeys = [];
 var missingID = 0;
-var qreg = /["]/g;
-var paraq = /\n[ ]{4}"(\S+(\s|\n))*[ ]{4}/g;
-var badq = /"(\S+(\s\n))*"/g;
 var topElement;
 var doctypeRegex = /\<\!DOCTYPE[^>]*>/i;
 var destDir = './json';
