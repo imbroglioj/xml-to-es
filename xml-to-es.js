@@ -45,7 +45,7 @@ if (!Array.prototype['contains']) {
 }
 
 process.on('uncaughtException', function (err) {
-    logger.error(util.inspect(err, {depth: null}));
+    logger.error("Uncaught error: "+util.inspect(err, {depth: null}));
 })
 
 function lowerCaseKeys(o) {
@@ -124,15 +124,7 @@ function handleFields(result, cb) {
             if (typeof result[key] === 'object' && !Object.keys(result[key]).length) delete result[key];
         });
         if (!result.id) result.id = 'missingID-' + missingID++;
-        var output = fs.createWriteStream(path.join(destDir, result.id + '-' + path.basename(argv._[0])
-            .replace(path.extname(argv._[0]), fileExt)), {encoding: 'utf8'});
-
-        if (fmt == 'html') {
-            htmlGenerator.generate(output, result, config);
-        } else {
-            jsonGenerator.generate(output, result, config);
-        }
-        if (cb) setImmediate(cb);
+        cb(null, result);
     } catch (err) {
         console.error(util.format('handleFields: %s\n  %s\nFROM:%s', err, (err.stack ? err.stack : ''),
             util.inspect(result, {depth: 2})));
@@ -161,7 +153,7 @@ function processGoodDoc(teRegex, s, strings, eltClose, cb) {
         // put docs in in correct order
         for (var i=newStrings.length-1; i>=0; i--) strings.unshift(newStrings[i]);
         // leave and process prepended strings
-        return cb ? setImmediate(cb) : null;
+        return cb('recycling');
     }
 
     s = ha.handleUnclosedQuotes(s);
@@ -174,7 +166,7 @@ function processGoodDoc(teRegex, s, strings, eltClose, cb) {
         parser(s, function (err, x) {
             if (err) {
                 logger.error("Parse error processing string: %s\n", s, err);
-                return cb ? setImmediate(cb) : null;
+                return cb(err);
             } else
                 handleFields(x, cb);
         });
@@ -205,7 +197,22 @@ function processXmlGroup(xml) {
 
         if (s && teRegex.test(s)) {
             doneOne = true;
-            processGoodDoc(teRegex, s, strings, eltClose, oneDoc);
+            processGoodDoc(teRegex, s, strings, eltClose, function(err, result){
+                if (err){
+                    if (err === 'recycling') return setImmediate(oneDoc);
+                    logger.error("Field handling error processing string: %s\n", s, err);
+                    return setImmediate(oneDoc);
+                } // else
+                var output = fs.createWriteStream(path.join(destDir, result.id + '-' + path.basename(argv._[0])
+                    .replace(path.extname(argv._[0]), fileExt)), {encoding: 'utf8'});
+
+                if (fmt == 'html') {
+                    htmlGenerator.generate(output, result, config);
+                } else {
+                    jsonGenerator.generate(output, result, config);
+                }
+                setImmediate(oneDoc);
+            });
         } else {
             // what about comments?
             s = ha.supplyMissingHeadElement(s, topElement, strings, oneDoc);
