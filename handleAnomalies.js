@@ -49,7 +49,7 @@ exports.splitForBadDocumentClose = function splitForBadDocumentClose(s, topEleme
     // split docs with missing or bad head element close
     var newStrings = [];
     var tmp;
-    while (tmp = teRegex.exec(s)) {
+    while ((tmp = teRegex.exec(s))) {
         // missing end element
         var ns = s.substring(currentIndex, tmp.index);
         ns = clearElementClose(ns, topElement);
@@ -67,12 +67,12 @@ exports.supplyMissingHeadElement = function supplyMissingHeadElement(s, topEleme
             topElement, s.substring(0, 100));
         if (s.length > 20) {
             var loc = /<([^-\s!>]+)/.exec(s);
-            if (topElement.score(loc[1]) > .5) {
+            if (topElement.score(loc[1]) > 0.5) {
                 s = s.replace(loc[1], topElement);
-                console.error('*** correcting top element to: %s\n', s.substring(0, 100))
+                console.error('*** correcting top element to: %s\n', s.substring(0, 100));
             } else {// okay just fudg it
                 s = '<' + topElement + '>\n' + s;
-                console.error('*** adding top element as: %s\n', s.substring(0, 100))
+                console.error('*** adding top element as: %s\n', s.substring(0, 100));
             }
             strings.unshift(s);
         }

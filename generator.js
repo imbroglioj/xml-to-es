@@ -28,7 +28,7 @@ exports.HtmlGenerator = function(fs, util, log){
                                 if (typeof val2 === 'object') val2 = JSON.stringify(val2);
                                 outputStream.write(util.format('<META name="%s" content="%s">\n', key + '.' + k,
                                     val2.replace(/[\n\f\r]/gm, ' ')));
-                            })
+                            });
                         }
                         return;
                     } else
@@ -53,5 +53,5 @@ exports.JsonGenerator = function(fs, util, log){
     self.generate = function(outputStream, json){
         outputStream.write(util.format("%j", json));
         outputStream.end();
-    }
+    };
 };

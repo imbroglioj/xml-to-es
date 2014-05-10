@@ -40,13 +40,13 @@ function apush(json, key, val) {
 }
 
 
-if (!Array.prototype['contains']) {
-    Object.defineProperty(Array.prototype, 'contains', {value: function (item) {return this.indexOf(item) >= 0}});
+if (!Array.prototype.contains) {
+    Object.defineProperty(Array.prototype, 'contains', {value: function (item) {return this.indexOf(item) >= 0;}});
 }
 
 process.on('uncaughtException', function (err) {
     logger.error("Uncaught error: "+util.inspect(err, {depth: null}));
-})
+});
 
 function lowerCaseKeys(o) {
     Object.keys(o).forEach(function (key) {
@@ -89,7 +89,7 @@ function flattenBogusObjects(data) {
 function handleFields(result, cb) {
     var onto;
     var classes;
-    var axioms
+    var axioms;
 
     lowerCaseKeys(result);
     try {
@@ -130,10 +130,7 @@ function handleFields(result, cb) {
             util.inspect(result, {depth: 2})));
         if (cb) cb(err);
     }
-
-};
-
-
+}
 
 
 function processGoodDoc(teRegex, s, strings, eltClose, cb) {
@@ -224,7 +221,7 @@ function processXmlGroup(xml) {
 var vacuousKeys = [];
 var missingID = 0;
 var topElement;
-var doctypeRegex = /\<\!DOCTYPE[^>]*>/i;
+var doctypeRegex = /<\!DOCTYPE[^>]*>/i;
 var destDir = './json';
 var fileExt = '.json';
 var bodyKey = 'text';

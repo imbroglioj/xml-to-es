@@ -36,7 +36,7 @@ exports.logger = {
             var maybeErr = arguments.length ? arguments[arguments.length - 1] : null;
             if (maybeErr) {
                 console.error(maybeErr);
-                if (maybeErr['stack']) console.log(maybeErr.stack);
+                if (maybeErr.stack) console.log(maybeErr.stack);
             }
         } catch (err) {
             console.error("logging error:");
