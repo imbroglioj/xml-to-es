@@ -87,10 +87,6 @@ function flattenBogusObjects(data) {
 }
 
 function handleFields(result, cb) {
-    var onto;
-    var classes;
-    var axioms;
-
     lowerCaseKeys(result);
     try {
         // promotions
@@ -174,7 +170,7 @@ function processGoodDoc(teRegex, s, strings, eltClose, cb) {
 }
 
 
-function processXmlGroup(xml) {
+function processXmlGroup(xml, generator) {
     logger.trace("going to parse now");
     var doctype = xml.match(doctypeRegex);
     xml = xml.replace(doctypeRegex, '').trim();
@@ -202,12 +198,7 @@ function processXmlGroup(xml) {
                 } // else
                 var output = fs.createWriteStream(path.join(destDir, result.id + '-' + path.basename(argv._[0])
                     .replace(path.extname(argv._[0]), fileExt)), {encoding: 'utf8'});
-
-                if (fmt == 'html') {
-                    htmlGenerator.generate(output, result, config);
-                } else {
-                    jsonGenerator.generate(output, result, config);
-                }
+                generator.generator(output, result, config);
                 setImmediate(oneDoc);
             });
         } else {
@@ -251,5 +242,12 @@ if (require.main === module) {
         logger.trace("Digested chunk");
         xml += chunk;
     });
-    input.on('end', function () {processXmlGroup(xml);});
+    var genFun ;
+    if (fmt == 'html') {
+        genFun=htmlGenerator.generate;
+    } else {
+        genFun = jsonGenerator.generate;
+    }
+
+    input.on('end', function () {processXmlGroup(xml, genFun);});
 }

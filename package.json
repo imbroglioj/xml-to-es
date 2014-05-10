@@ -8,7 +8,13 @@
         "optimist": "~0.6.1",
         "string_score": "~0.1.20"
     },
-    "devDependencies": {},
+    "jshintConfig" :{
+        "laxcomma":true
+    },
+    "devDependencies": {
+        "mocha":"~1.18.2",
+        "chai":"~1.9.1"
+    },
     "scripts": {
         "test": "node xml-to-es test/data/test.sgm --properties lewis-config.js"
     },

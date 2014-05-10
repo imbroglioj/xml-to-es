@@ -8,7 +8,6 @@
 // handle odd problems with the input
 
 var util = require('util');
-
 var paraq = /\n[ ]{4}"(\S+(\s|\n))*[ ]{4}/g
     , qreg = /["]/g
     , badq = /"(\S+(\s\n))*"/g
