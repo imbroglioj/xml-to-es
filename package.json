@@ -2,7 +2,7 @@
     "name": "xml-to-es",
     "version": "0.1.0",
     "description": "Translates XML (or reasonable SGML) input into a json document suitable for elasticsearch",
-    "main": "xml-to-es.js",
+    "main": "./lib/xml-to-es.js",
     "dependencies": {
         "libxmljs": "~0.9.0",
         "optimist": "~0.6.1",
