@@ -15,7 +15,10 @@
     "mocha": "~1.18.2",
     "chai": "~1.9.1",
     "gulp": "~3.6.2",
-    "gulp-clean": "~0.2.4"
+    "gulp-clean": "~0.2.4",
+    "gulp-mocha": "~0.4.1",
+    "gulp-plumber": "~0.6.1",
+    "gulp-notify": "~1.2.5"
   },
   "scripts": {
     "test": "node xml-to-es test/data/test.sgm --properties lewis-config.js"

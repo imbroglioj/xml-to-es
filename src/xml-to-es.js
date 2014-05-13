@@ -13,6 +13,8 @@ require('string_score');
 var //mongo = require('mongoskin'),
     util = require('util'),
     parser = require('libxml-to-js'),
+    path = require('path'),
+    fs = require('fs'),
     ha = require('./handleAnomalies.js')
     ;
 
@@ -145,7 +147,7 @@ exports.Parser = function (config) {
     // Handles a string which may contain one or more xml/sgml documents.
     // * xml : the string with xml document(s)
     // * generator (json_version_of_xml) : outputs json to file in whatever format desired
-    self.processXmlDocs = function processXmlDocs(xml, generator) {
+    self.processXmlDocs = function processXmlDocs(xml, generator, cb) {
         logger.trace("going to parse now");
         var doctype = xml.match(doctypeRegex);
         xml = xml.replace(doctypeRegex, '').trim();
@@ -160,7 +162,7 @@ exports.Parser = function (config) {
 
         function oneDoc() {
             var teRegex = new RegExp('<' + topElement, 'igm');
-            if (!strings || !strings.length) return;
+            if (!strings || !strings.length) return cb ? setImmediate(cb) : '';
             var s = strings.shift().trim();
 
             if (s && teRegex.test(s)) {
@@ -195,47 +197,77 @@ exports.Parser = function (config) {
         });
     };
 
-    self.resolveOptions = function(argv){
-        var pfile = argv.config;
-        if (!/\.js$/.test(pfile)) pfile += '.js';
-        var config = require(path.resolve(pfile));
-        var infiles = argv._[0];
-        if (!fs.existsSync(infiles)){
-            throw new Error("No such input file or directory: "+infiles);
+    self.processFiles = function(cb){
+        var files = config.infiles.slice(0);
+
+        function doOne(){
+            if (!files || !files.length) return cb? setImmediate(cb) : '';
+            var infile = files.shift(); // do in order
+            var input = fs.createReadStream(infile, 'utf8'); // should this be bin?
+            var xml = '';
+            logger.debug("Starting main");
+            input.on('data', function (chunk) {
+                logger.trace("Digested chunk");
+                xml += chunk;
+            });
+
+            input.on('end', function () {
+                self.processXmlDocs(xml, config.generator, doOne);
+            });
         }
-        infiles = infiles.split(',');
-        config.infiles=[]
-        infiles.forEach(function(infile){
-            if (fs.isDirectory(infile)) {
-                config.infiles = config.infiles.concat(
-                    fs.readdirSync(infile)
-                        .filter(function(fn) { // filter for file extensions
-                            return ! config.intput.fileExt || path.extname(fn) == config.input.fileExt;
-                        })
-                        .map(function (filename) { // add full path
-                            return path.join(infile, filename);
-                        }));
-            } else config.infiles.push(infile);
-        });
-        config.logger = exports.logger;
-        if (config.output.fileExt && !/^\./.test(config.output.fileExt))
-            config.output.fileExt = '.' + config.output.fileExt;
 
-        config.output.destDir = path.resolve(config.output.destDir);
-        if (!fs.existsSync(config.output.destDir)) fs.mkdir(config.output.destDir);
-
-        if (!config.input.flatten) config.input.flatten = [];
-        if (!config.input.flatten.contains('#')) config.input.flatten.unshift('#');
-
-        logger.setLevel(argv.level || 'DEBUG');
-        var generator = new exports.Generator(config);
-        config.generator = generator.createGenerator(config);
-        return config;
+        doOne();
     };
 
 };
 
+function deepExtend(target, src){
+    util._extend(target, src);
+    Object.keys(src).forEach(function(key){
+        if (typeof src[key]==='object') deepExtend(target[key], src[key]);
+    });
+    return target;
+}
 
+exports.resolveOptions = function(argv){
+    var pfile = argv.config;
+    if (!/\.js$/.test(pfile)) pfile += '.js';
+    // be careful because require caches the object and you can't safely reuse it.
+    var config = deepExtend({}, require(path.resolve(process.cwd(),pfile)));
+    //console.dir(config);
+    config.output.fmt=config.output.fmt.toLowerCase();
+    var infiles = argv._[0];
+    infiles = infiles.split(',');
+    config.infiles=[];
+    infiles.forEach(function(infile){
+        if (!fs.existsSync(infile)){
+            throw new Error("No such input file or directory: "+infiles);
+        }
+        if (fs.statSync(infile).isDirectory()) {
+            config.infiles = config.infiles.concat(
+                fs.readdirSync(infile)
+                    .filter(function(fn) { // filter for file extensions
+                        return ! config.input.fileExt || path.extname(fn) == config.input.fileExt;
+                    })
+                    .map(function (filename) { // add full path
+                        return path.join(infile, filename);
+                    }));
+        } else config.infiles.push(infile);
+    });
+    config.logger = exports.logger;
+    config.logger.setLevel(argv.level || 'DEBUG');
+    if (config.output.fileExt && !/^\./.test(config.output.fileExt))
+        config.output.fileExt = '.' + config.output.fileExt;
+    config.output.destDir = path.resolve(process.cwd(), config.output.destDir);
+    if (!fs.existsSync(config.output.destDir)) fs.mkdir(config.output.destDir);
+
+    if (!config.input.flatten) config.input.flatten = [];
+    if (!config.input.flatten.contains('#')) config.input.flatten.unshift('#');
+
+    var generator = new exports.Generator(config);
+    generator.createGenerator(config);
+    return config;
+};
 
 exports.Generator = require('./generator.js').Generator;
 

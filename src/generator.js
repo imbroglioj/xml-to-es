@@ -27,35 +27,6 @@ function createAggregateOutputStream(targetFileBase, tag, config) {
 exports.Generator = function (config) {
     var self = this;
 
-    self.generatorMap = {
-        html: self.generateHtml,
-        json: self.generateJson
-    };
-
-    self.createGenerator = function () {
-        config.output.generator = config.output.docsPerFile === 1 ? self.createOneDocPerFileFun(config)
-            : self.createAggregateOutputFun(config);
-    };
-
-    self.createOneDocPerFileFun = function (config) {
-        return function (json) {self.generatorMap[config.output.fmt](createOutputStreamFromId(config.infiles[0], json, config), json);};
-    };
-
-    self.createAggregateOutputFun = function (config) {
-        var outputDocCount = 0;
-        var outputFileCount = 0;
-        var output;
-        var targetFileBase = config.infiles[0].replace(path.extname(config.infiles), '');
-        if (config.output.docsPerFile === 0) output = createAggregateOutputStream(targetFileBase, '', config);
-
-        return function (json) {
-            if (config.output.docsPerFile > 1
-                && outputDocCount % config.output.docsPerFile === 0) {
-                output = createAggregateOutputStream(targetFileBase, outputFileCount++, config);
-            }
-            self.generatorMap[config.output.fmt](output, json);
-        }
-    };
 
     self.generateHtml = function (outputStream, json) {
         var bodyKey = config.input.bodyKey;
@@ -97,6 +68,36 @@ exports.Generator = function (config) {
     self.generateJson = function (outputStream, json) {
         outputStream.write(util.format("%j", json));
         outputStream.end();
+    };
+
+    self.generatorMap = {
+        html: self.generateHtml,
+        json: self.generateJson
+    };
+
+    self.createGenerator = function () {
+        config.generator = config.output.docsPerFile === 1 ? self.createOneDocPerFileFun(config)
+            : self.createAggregateOutputFun(config);
+    };
+
+    self.createOneDocPerFileFun = function (config) {
+        return function (json) {self.generatorMap[config.output.fmt](createOutputStreamFromId(config.infiles[0], json, config), json);};
+    };
+
+    self.createAggregateOutputFun = function (config) {
+        var outputDocCount = 0;
+        var outputFileCount = 0;
+        var output;
+        var targetFileBase = path.basename(config.infiles[0]).replace(path.extname(config.infiles), '');
+        if (config.output.docsPerFile === 0) output = createAggregateOutputStream(targetFileBase, '', config);
+
+        return function (json) {
+            if (config.output.docsPerFile > 1
+                && outputDocCount % config.output.docsPerFile === 0) {
+                output = createAggregateOutputStream(targetFileBase, outputFileCount++, config);
+            }
+            self.generatorMap[config.output.fmt].call(self, output, json);
+        }
     };
 
 };

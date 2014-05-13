@@ -8,7 +8,6 @@
 var core = require('../src/xml-to-es'),
     logger = core.logger,
     fs = require('fs'),
-    path = require('path'),
     util = require('util'),
     argv = require('optimist')
         .usage('USAGE: $0 INPUT_FILE --config PATH_TO_PROPERTIES_JS [--level LOGLEVEL]')
@@ -22,24 +21,20 @@ var core = require('../src/xml-to-es'),
 var fileExt = '.json';
 
 process.on('uncaughtException', function (err) {
-    logger.error("Uncaught error: " + util.inspect(err, {depth: null}));
+    logger.error("Uncaught error: " + util.inspect(err, {depth: null}) +
+    err.stack ? err.stack : '-- no stack');
 });
 
 if (require.main === module) {
-    var config = core.resolveOptions(config);
+    var config = core.resolveOptions(argv);
     var parser = new core.Parser(config);
-    config.infiles.forEach(function(infile){
-        var input = fs.createReadStream(infile, 'utf8'); // should this be bin?
-        var xml = '';
-        logger.debug("Starting main");
-        input.on('data', function (chunk) {
-            logger.trace("Digested chunk");
-            xml += chunk;
-        });
-
-        input.on('end', function () {
-            parser.processXmlDocs(xml, config.output.generator);
-        });
-    });
+    config.generator = function(json){
+        should.exist(json);
+        should.exist(json.id);
+        json.id.should.eql("10003");
+        json.body.should.contain("Biogen");
+        json.title.should.contain("BIOGEN");
+    };
+    parser.processFiles();
 }
 

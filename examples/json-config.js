@@ -6,7 +6,7 @@
  */
 
 var config = require('./lewis-config.js')
-;
+    ;
 // # config file for xml-to-es
 // * output : {
 //   * fmt: JSON|HTML or whatever formats you might add to generator.js
@@ -18,12 +18,10 @@ var config = require('./lewis-config.js')
 //     0 =>   " unlimited
 // }
 config.output = {
-    output: {
-        fmt : "JSON",
-        fileExt: ".json",
-        destDir: "./json",
-        docsPerFile: 1
-    }
+    fmt: "JSON",
+    fileExt: ".json",
+    destDir: "./json",
+    docsPerFile: 1
 };
 
-module.exports=config;
+module.exports = config;

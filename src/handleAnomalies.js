@@ -11,6 +11,7 @@ var util = require('util');
 var paraq = /\n[ ]{4}"(\S+(\s|\n))*[ ]{4}/g
     , qreg = /["]/g
     , badq = /"(\S+(\s\n))*"/g
+    , logger = require('./cheap-logger.js').logger
     ;
 
 exports.handleUnclosedQuotes = function handleUnclosedQuotes(s) {
@@ -62,16 +63,16 @@ exports.splitForBadDocumentClose = function splitForBadDocumentClose(s, topEleme
 //todo: can we safely capture a situation where the <HEAD is missing but the attributes..> are intact?
 exports.supplyMissingHeadElement = function supplyMissingHeadElement(s, topElement, strings, cb) {
     if (s.length) {
-        console.error(util.format('Top element: %s not found in start of xml piece: %s.'),
+        logger.warn(util.format('Top element: %s not found in start of xml piece: %s.'),
             topElement, s.substring(0, 100));
         if (s.length > 20) {
             var loc = /<([^-\s!>]+)/.exec(s);
             if (topElement.score(loc[1]) > 0.5) {
                 s = s.replace(loc[1], topElement);
-                console.error('*** correcting top element to: %s\n', s.substring(0, 100));
+                logger.warn('*** correcting top element to: %s\n', s.substring(0, 100));
             } else {// okay just fudg it
                 s = '<' + topElement + '>\n' + s;
-                console.error('*** adding top element as: %s\n', s.substring(0, 100));
+                logger.warn('*** adding top element as: %s\n', s.substring(0, 100));
             }
             strings.unshift(s);
         }
