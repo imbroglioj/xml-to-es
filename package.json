@@ -1,30 +1,32 @@
 {
-    "name": "xml-to-es",
-    "version": "0.1.0",
-    "description": "Translates XML (or reasonable SGML) input into a json document suitable for elasticsearch",
-    "main": "./lib/xml-to-es.js",
-    "dependencies": {
-        "libxmljs": "~0.9.0",
-        "optimist": "~0.6.1",
-        "string_score": "~0.1.20"
-    },
-    "jshintConfig" :{
-        "laxcomma":true
-    },
-    "devDependencies": {
-        "mocha":"~1.18.2",
-        "chai":"~1.9.1"
-    },
-    "scripts": {
-        "test": "node xml-to-es test/data/test.sgm --properties lewis-config.js"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git@bitbucket.org:jbroglio/xml-to-es.git"
-    },
-    "keywords": [
-        "elasticsearch, xml, sgml"
-    ],
-    "author": "John Broglio",
-    "license": "Apache 2"
+  "name": "xml-to-es",
+  "version": "0.1.0",
+  "description": "Translates XML (or reasonable SGML) input into a json document suitable for elasticsearch",
+  "main": "./lib/xml-to-es",
+  "dependencies": {
+    "libxmljs": "~0.9.0",
+    "optimist": "~0.6.1",
+    "string_score": "~0.1.20"
+  },
+  "jshintConfig": {
+    "laxcomma": true
+  },
+  "devDependencies": {
+    "mocha": "~1.18.2",
+    "chai": "~1.9.1",
+    "gulp": "~3.6.2",
+    "gulp-clean": "~0.2.4"
+  },
+  "scripts": {
+    "test": "node xml-to-es test/data/test.sgm --properties lewis-config.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@bitbucket.org:jbroglio/xml-to-es.git"
+  },
+  "keywords": [
+    "elasticsearch, xml, sgml"
+  ],
+  "author": "John Broglio",
+  "license": "Apache 2"
 }

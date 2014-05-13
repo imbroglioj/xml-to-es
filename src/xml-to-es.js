@@ -13,7 +13,7 @@ require('string_score');
 var //mongo = require('mongoskin'),
     util = require('util'),
     parser = require('libxml-to-js'),
-    ha = require('./lib/handleAnomalies.js')
+    ha = require('./handleAnomalies.js')
     ;
 
 
@@ -21,26 +21,28 @@ if (!Array.prototype.contains) {
     Object.defineProperty(Array.prototype, 'contains', {value: function (item) {return this.indexOf(item) >= 0;}});
 }
 
-function lowerCaseKeys(o) {
-    Object.keys(o).forEach(function (key) {
-        var kl = key.toLowerCase();
-        var val = o[key];
-        o[kl] = val;
-        if (kl !== key) delete o[key];
-        if (!Array.isArray(val) && val instanceof Object) {
-            if (!Object.keys(val).length) {
-                delete o[kl];
-            }
-            else {
-                lowerCaseKeys(val);
-            }
-        }
-    });
-}
 
 exports.Parser = function (config) {
     var self = this;
-    var vacuousKeys = config.flatten;
+    var vacuousKeys = config.input.flatten,
+        logger = config.logger;
+
+    function lowerCaseKeys(o) {
+        Object.keys(o).forEach(function (key) {
+            var kl = key.toLowerCase();
+            var val = o[key];
+            o[kl] = val;
+            if (kl !== key) delete o[key];
+            if (!Array.isArray(val) && val instanceof Object) {
+                if (!Object.keys(val).length) {
+                    delete o[kl];
+                }
+                else {
+                    lowerCaseKeys(val);
+                }
+            }
+        });
+    }
 
     function flattenBogusObjects(data) {
         try {
@@ -103,9 +105,9 @@ exports.Parser = function (config) {
             // promotions
             Object.keys(result).forEach(function (parent) {
                 // promote[key] : [..]
-                if (config.promote[parent]) {
+                if (config.input.promote[parent]) {
                     // travel array
-                    config.promote[parent].forEach(function (pkey) {
+                    config.input.promote[parent].forEach(function (pkey) {
                         var target = pkey;
                         if (typeof pkey === 'object') {
                             target = pkey.target;
@@ -169,7 +171,7 @@ exports.Parser = function (config) {
                         logger.error("Field handling error processing string: %s\n", s, err);
                         return setImmediate(oneDoc);
                     } // else
-                    generator.generator(result);
+                    generator(result);
                     setImmediate(oneDoc);
                 });
             } else {
@@ -193,7 +195,47 @@ exports.Parser = function (config) {
         });
     };
 
+    self.resolveOptions = function(argv){
+        var pfile = argv.config;
+        if (!/\.js$/.test(pfile)) pfile += '.js';
+        var config = require(path.resolve(pfile));
+        var infiles = argv._[0];
+        if (!fs.existsSync(infiles)){
+            throw new Error("No such input file or directory: "+infiles);
+        }
+        infiles = infiles.split(',');
+        config.infiles=[]
+        infiles.forEach(function(infile){
+            if (fs.isDirectory(infile)) {
+                config.infiles = config.infiles.concat(
+                    fs.readdirSync(infile)
+                        .filter(function(fn) { // filter for file extensions
+                            return ! config.intput.fileExt || path.extname(fn) == config.input.fileExt;
+                        })
+                        .map(function (filename) { // add full path
+                            return path.join(infile, filename);
+                        }));
+            } else config.infiles.push(infile);
+        });
+        config.logger = exports.logger;
+        if (config.output.fileExt && !/^\./.test(config.output.fileExt))
+            config.output.fileExt = '.' + config.output.fileExt;
+
+        config.output.destDir = path.resolve(config.output.destDir);
+        if (!fs.existsSync(config.output.destDir)) fs.mkdir(config.output.destDir);
+
+        if (!config.input.flatten) config.input.flatten = [];
+        if (!config.input.flatten.contains('#')) config.input.flatten.unshift('#');
+
+        logger.setLevel(argv.level || 'DEBUG');
+        var generator = new exports.Generator(config);
+        config.generator = generator.createGenerator(config);
+        return config;
+    };
+
 };
+
+
 
 exports.Generator = require('./generator.js').Generator;
 

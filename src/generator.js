@@ -6,15 +6,59 @@
  */
 
 var fs = require('fs'),
-    util = require('util')
+    util = require('util'),
+    path = require('path')
     ;
 
+function createOutputStreamFromId(infile, json, config) {
+    return fs.createWriteStream(path.join(config.output.destDir, json.id + '-' + path.basename(infile)
+        .replace(path.extname(infile), config.output.fileExt)), {encoding: 'utf8'});
+}
+
+function createAggregateOutputStream(targetFileBase, tag, config) {
+    if (config.output.docsPerFile) // > 0
+        return fs.createWriteStream(path.join(config.output.destDir,
+                targetFileBase+'-'+tag+config.output.fileExt));
+    else // === 0
+        return fs.createWriteStream(path.join(config.output.destDir,
+                targetFileBase+tag+config.output.fileExt));
+}
 
 exports.Generator = function (config) {
     var self = this;
 
+    self.generatorMap = {
+        html: self.generateHtml,
+        json: self.generateJson
+    };
+
+    self.createGenerator = function () {
+        config.output.generator = config.output.docsPerFile === 1 ? self.createOneDocPerFileFun(config)
+            : self.createAggregateOutputFun(config);
+    };
+
+    self.createOneDocPerFileFun = function (config) {
+        return function (json) {self.generatorMap[config.output.fmt](createOutputStreamFromId(config.infiles[0], json, config), json);};
+    };
+
+    self.createAggregateOutputFun = function (config) {
+        var outputDocCount = 0;
+        var outputFileCount = 0;
+        var output;
+        var targetFileBase = config.infiles[0].replace(path.extname(config.infiles), '');
+        if (config.output.docsPerFile === 0) output = createAggregateOutputStream(targetFileBase, '', config);
+
+        return function (json) {
+            if (config.output.docsPerFile > 1
+                && outputDocCount % config.output.docsPerFile === 0) {
+                output = createAggregateOutputStream(targetFileBase, outputFileCount++, config);
+            }
+            self.generatorMap[config.output.fmt](output, json);
+        }
+    };
+
     self.generateHtml = function (outputStream, json) {
-        var bodyKey = config.bodyKey;
+        var bodyKey = config.input.bodyKey;
         outputStream.write(util.format("<HTML>\n<head><title>%s</title>\n", json.id));
         Object.keys(json).forEach(function (key) {
             if (key != bodyKey) {

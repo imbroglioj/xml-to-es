@@ -1,9 +1,12 @@
-/** html-properties.js
+/** json-config
  *
  * author: jbroglio
- * Date: 5/7/14
- * Time: 9:04 AM
+ * Date: 5/13/14
+ * Time: 11:04 AM
  */
+
+var config = require('./lewis-config.js')
+;
 // # config file for xml-to-es
 // * output : {
 //   * fmt: JSON|HTML or whatever formats you might add to generator.js
@@ -14,13 +17,13 @@
 //     n => for search engines that handle multiple (html) docs in a file
 //     0 =>   " unlimited
 // }
-var config = require('./lewis-config.js');
-
 config.output = {
-    fmt: "html",
-    docsPerFile: '100',
-    fileExt: ".html",
-    destDir: "./html"
+    output: {
+        fmt : "JSON",
+        fileExt: ".json",
+        destDir: "./json",
+        docsPerFile: 1
+    }
 };
 
-module.exports = config;
+module.exports=config;

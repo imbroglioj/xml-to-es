@@ -7,3 +7,5 @@ errs
 node_modules
 reut.sh
 html
+dist
+tmp
