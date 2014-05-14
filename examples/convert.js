@@ -8,13 +8,7 @@
 var core = require('../src/xml-to-es'),
     logger = core.logger,
     fs = require('fs'),
-    util = require('util'),
-    argv = require('optimist')
-        .usage('USAGE: $0 INPUT_FILE --config PATH_TO_PROPERTIES_JS [--level LOGLEVEL]')
-        .demand([1, 'config'])
-        .string('config')
-        .argv
-
+    util = require('util')
     ;
 
 
@@ -26,6 +20,12 @@ process.on('uncaughtException', function (err) {
 });
 
 if (require.main === module) {
+    var argv = require('optimist')
+        .usage('USAGE: $0 INPUT_FILES --config PATH_TO_PROPERTIES_JS [--level LOGLEVEL]')
+        .demand([1, 'config'])
+        .string('config')
+        .argv;
+
     var config = core.resolveOptions(argv);
     var parser = new core.Parser(config);
     config.generator = function(json){
