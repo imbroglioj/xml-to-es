@@ -21,7 +21,10 @@ config.output = {
     fmt: "JSON",
     fileExt: ".json",
     destDir: "./json",
-    docsPerFile: 1
+    docsPerFile: 1,
+    leadChar : '[', // for aggregating
+    trailChar : ']',
+    sepChar: ','
 };
 
 module.exports = config;

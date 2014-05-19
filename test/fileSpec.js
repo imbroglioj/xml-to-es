@@ -8,7 +8,7 @@
 var should = require('chai').should()
     , path = require('path')
     , core = require('../src/xml-to-es')
-    , Page = require('./fileSpecPage.js').FileSpecPage
+    , Page = require('./FileSpecPage.js').FileSpecPage
     ;
 
 describe("sgml tests", function () {

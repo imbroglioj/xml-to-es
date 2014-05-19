@@ -13,19 +13,24 @@ var simpleFile = 'test.sgm',
 
 exports.FileSpecPage = function (core, path, should) {
     var self = this;
-
-    self.makeJsonConfig = function (filename) {
+    function jsonDone(json){return json == ':done';}
+    self.jsonDone = jsonDone;
+    self.simpleFile = simpleFile;
+    self.goodTags = goodTags;
+    self.badTags = badTags;
+    self.makeJsonConfig = function (filename, overrides) {
         return core.resolveOptions({
             _: [path.join(__dirname, 'data', filename)],
             config: path.join(__dirname, '../examples/json-config.js'),
             level: 'error',
             '$0': process.argv[0] + ' ' + process.argv[1]
-        });
+        }, overrides);
     };
 
     self.testSimpleConfig = function(){
         var config = self.makeJsonConfig(simpleFile);
         config.generator = function (json) {
+            if (jsonDone(json)) return;
             console.log("Using TEST generator");
             should.exist(json);
             should.exist(json.id);
@@ -38,9 +43,11 @@ exports.FileSpecPage = function (core, path, should) {
 
 
     self.testTags = function(filename, regex){
+
         var config = self.makeJsonConfig(filename);
         var docs=[];
         config.generator = function (json) {
+            if (jsonDone(json)) return;
             docs.push(json);
         };
         new core.Parser(config).processFiles(function(){
@@ -66,6 +73,7 @@ exports.FileSpecPage = function (core, path, should) {
         var docCount = 0;
         config.infiles.length.should.equal(3);
         config.generator = function (json) {
+            if (jsonDone(json)) return;
             docCount++;
         };
         new core.Parser(config).processFiles(function(){

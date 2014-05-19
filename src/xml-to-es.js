@@ -201,7 +201,10 @@ exports.Parser = function (config) {
         var files = config.infiles.slice(0);
 
         function doOne(){
-            if (!files || !files.length) return cb? setImmediate(cb) : '';
+            if (!files || !files.length) {
+                config.generator(':done');
+                return cb? setImmediate(cb) : '';
+            }
             var infile = files.shift(); // do in order
             var input = fs.createReadStream(infile, 'utf8'); // should this be bin?
             var xml = '';
@@ -221,6 +224,7 @@ exports.Parser = function (config) {
 
 };
 
+// only safe when adding new keys; not for merging!
 function deepExtend(target, src){
     util._extend(target, src);
     Object.keys(src).forEach(function(key){
@@ -229,7 +233,8 @@ function deepExtend(target, src){
     return target;
 }
 
-exports.resolveOptions = function(argv){
+
+exports.resolveOptions = function(argv, overrides){
     var pfile = argv.config;
     if (!/\.js$/.test(pfile)) pfile += '.js';
     // be careful because require caches the object and you can't safely reuse it.
@@ -238,24 +243,33 @@ exports.resolveOptions = function(argv){
     config.output.fmt=config.output.fmt.toLowerCase();
     var infiles = argv._[0];
     infiles = infiles.split(',');
-    config.infiles=[];
-    infiles.forEach(function(infile){
-        if (!fs.existsSync(infile)){
-            throw new Error("No such input file or directory: "+infiles);
-        }
-        if (fs.statSync(infile).isDirectory()) {
-            config.infiles = config.infiles.concat(
-                fs.readdirSync(infile)
-                    .filter(function(fn) { // filter for file extensions
-                        return ! config.input.fileExt || path.extname(fn) == config.input.fileExt;
-                    })
-                    .map(function (filename) { // add full path
-                        return path.join(infile, filename);
-                    }));
-        } else config.infiles.push(infile);
-    });
-    config.logger = exports.logger;
-    config.logger.setLevel(argv.level || 'DEBUG');
+    if (overrides){
+        Object.keys(overrides).forEach(function(x){
+            if (config[x]) deepExtend(config[x], overrides[x]);
+            else config[x]= overrides[x];
+        });
+    }
+    if (! config.infiles) {
+        config.infiles = [];
+        infiles.forEach(function (infile) {
+            if (!fs.existsSync(infile)) {
+                throw new Error("No such input file or directory: " + infiles);
+            }
+            if (fs.statSync(infile).isDirectory()) {
+                config.infiles = config.infiles.concat(
+                    fs.readdirSync(infile)
+                        .filter(function (fn) { // filter for file extensions
+                            return !config.input.fileExt || path.extname(fn) == config.input.fileExt;
+                        })
+                        .map(function (filename) { // add full path
+                            return path.join(infile, filename);
+                        }));
+            } else config.infiles.push(infile);
+        });
+    }
+    exports.logger.setLevel(argv.level || 'DEBUG');
+
+    config.logger =  config.logger || exports.logger;
     if (config.output.fileExt && !/^\./.test(config.output.fileExt))
         config.output.fileExt = '.' + config.output.fileExt;
     config.output.destDir = path.resolve(process.cwd(), config.output.destDir);

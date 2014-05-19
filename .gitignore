@@ -9,3 +9,5 @@ reut.sh
 html
 dist
 tmp
+jsonTest
+*.bak

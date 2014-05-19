@@ -18,15 +18,14 @@ function createOutputStreamFromId(infile, json, config) {
 function createAggregateOutputStream(targetFileBase, tag, config) {
     if (config.output.docsPerFile) // > 0
         return fs.createWriteStream(path.join(config.output.destDir,
-                targetFileBase+'-'+tag+config.output.fileExt));
+                targetFileBase + '-' + tag + config.output.fileExt));
     else // === 0
         return fs.createWriteStream(path.join(config.output.destDir,
-                targetFileBase+tag+config.output.fileExt));
+                targetFileBase + tag + config.output.fileExt));
 }
 
 exports.Generator = function (config) {
     var self = this;
-
 
     self.generateHtml = function (outputStream, json) {
         var bodyKey = config.input.bodyKey;
@@ -62,17 +61,19 @@ exports.Generator = function (config) {
         outputStream.write('</head>\n<body>\n');
         if (bodyKey && json[bodyKey]) outputStream.write(json[bodyKey]);
         outputStream.write('\n</body>\n</HTML>\n');
-        outputStream.end();
     };
 
     self.generateJson = function (outputStream, json) {
         outputStream.write(util.format("%j", json));
-        outputStream.end();
     };
 
     self.generatorMap = {
-        html: self.generateHtml,
-        json: self.generateJson
+        html: {fn: self.generateHtml },
+        json: {fn: self.generateJson }
+    };
+
+    self.getGenerator = function () {
+        return self.generatorMap[config.output.fmt];
     };
 
     self.createGenerator = function () {
@@ -81,22 +82,41 @@ exports.Generator = function (config) {
     };
 
     self.createOneDocPerFileFun = function (config) {
-        return function (json) {self.generatorMap[config.output.fmt](createOutputStreamFromId(config.infiles[0], json, config), json);};
+        return function (json) {
+            if (json == ':done') return;
+            self.getGenerator().fn.call(self, createOutputStreamFromId(config.infiles[0], json, config), json);
+        };
     };
 
     self.createAggregateOutputFun = function (config) {
+        var leadChar = config.output.leadChar;
+        var trailChar = config.output.trailChar;
+        var sepChar = config.output.sepChar;
+        var genFun = self.getGenerator().fn;
         var outputDocCount = 0;
         var outputFileCount = 0;
         var output;
         var targetFileBase = path.basename(config.infiles[0]).replace(path.extname(config.infiles), '');
-        if (config.output.docsPerFile === 0) output = createAggregateOutputStream(targetFileBase, '', config);
-
+        if (config.output.docsPerFile === 0) {
+            output = createAggregateOutputStream(targetFileBase, '', config);
+            if (leadChar) output.write(leadChar);
+        }
+        var firstTime = true;
         return function (json) {
+            if (json == ':done') {
+                return output.end(trailChar? trailChar : '');
+            }
             if (config.output.docsPerFile > 1
                 && outputDocCount % config.output.docsPerFile === 0) {
+                if (output) {
+                    if (trailChar) output.end(trailChar);
+                    else output.end();
+                }
                 output = createAggregateOutputStream(targetFileBase, outputFileCount++, config);
-            }
-            self.generatorMap[config.output.fmt].call(self, output, json);
+            } else if (! firstTime){
+                output.write(sepChar);
+            } else firstTime = false;
+            genFun.call(self, output, json);
         }
     };
 
