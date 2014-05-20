@@ -27,6 +27,7 @@ module.exports = {
             ]
         },
         flatten: ['d'],
-        bodyKey: "body"
+        bodyKey: "body",
+        textParaRegex : /[\n\r]+(\t|[ ]{4,8})/mg
     }
 };

@@ -1,9 +1,12 @@
-/** html-properties.js
- *
+/** # json-config
+ *  Extract text (title, body) for submission to openNLP programs
  * author: jbroglio
- * Date: 5/7/14
- * Time: 9:04 AM
+ * Date: 5/13/14
+ * Time: 11:04 AM
  */
+
+var config = require('./lewis-config.js')
+    ;
 // # config file for xml-to-es
 // * output : {
 //   * fmt: JSON|HTML or whatever formats you might add to Generation.js
@@ -14,13 +17,11 @@
 //     n => for search engines that handle multiple (html) docs in a file
 //     0 =>   " unlimited
 // }
-var config = require('./lewis-config.js');
-
 config.output = {
-    fmt: "html",
-    docsPerFile: '100',
-    fileExt: ".html",
-    destDir: "./html"
+    fmt: "text",
+    fileExt: ".txt",
+    destDir: "./text-only",
+    docsPerFile: 1000
 };
 
 module.exports = config;

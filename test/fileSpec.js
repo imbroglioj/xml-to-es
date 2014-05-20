@@ -7,7 +7,7 @@
 
 var should = require('chai').should()
     , path = require('path')
-    , core = require('../src/xml-to-es')
+    , core = require('../lib/xml-to-es')
     , Page = require('./FileSpecPage.js').FileSpecPage
     ;
 

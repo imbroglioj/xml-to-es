@@ -12,7 +12,7 @@ var request = require('superagent')
     , fs = require('fs')
     , path = require('path')
     , util = require('util')
-    , logger = require('../src/cheap-logger.js').logger
+    , logger = require('../lib/cheap-logger.js').logger
     ;
 
 if (!Array.prototype.contains) {

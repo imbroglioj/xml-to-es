@@ -5,7 +5,7 @@
  * Time: 12:01 PM
  */
 
-var core = require('../src/xml-to-es'),
+var core = require('../lib/xml-to-es'),
     logger = core.logger,
     fs = require('fs'),
     util = require('util')
@@ -28,13 +28,6 @@ if (require.main === module) {
 
     var config = core.resolveOptions(argv);
     var parser = new core.Parser(config);
-    config.generator = function(json){
-        should.exist(json);
-        should.exist(json.id);
-        json.id.should.eql("10003");
-        json.body.should.contain("Biogen");
-        json.title.should.contain("BIOGEN");
-    };
     parser.processFiles();
 }
 
