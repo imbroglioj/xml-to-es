@@ -15,11 +15,16 @@ var gulp = require('gulp'),
 
 
 gulp.task('default', ['clean'],function(){
-    gulp.start('js', 'examples', 'package');
+    gulp.start('test','js', 'examples', 'package', 'testFiles');
+});
+
+gulp.task('testFiles', function(){
+    return gulp.src('test/**')
+        .pipe(gulp.dest('dist/test'))
 });
 
 gulp.task('js', function(){
-    return gulp.src('src/*.js')
+    return gulp.src('lib/*.js')
         .pipe(gulp.dest('dist/lib/'));
 
 });

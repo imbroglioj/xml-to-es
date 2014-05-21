@@ -18,9 +18,6 @@ var request = require('superagent')
 if (!Array.prototype.contains) {
     Object.defineProperty(Array.prototype, 'contains', {value: function (item) {return this.indexOf(item) >= 0;}});
 }
-var server = 'localhost';
-var port = 9200;
-
 
 exports.IndexFiles = function (config) {
     var self = this;
@@ -191,11 +188,13 @@ exports.resolveOptions = function resolveOptions(argv, overrides) {
         });
     }
     config.index.url = config.index.url
-        || util.format('http://%s:%d/%s/%s/', server, port, config.index.name, config.index.type);
+        || util.format('http://%s:%d/%s/%s/', config.index.server, config.index.port, config.index.name, config.index.type);
     config.index.createUrl = config.index.createUrl
-        || util.format('http://%s:%d/%s', server, port, config.index.name);
+        || util.format('http://%s:%d/%s', config.index.server, config.index.port, config.index.name);
     if (argv.level) logger.setLevel(argv.level);
     config.logger = config.logger || logger;
+    config.index.server = config.index.server || "localhost";
+    config.index.port = config.index.port || 9200;
     return config;
 };
 
