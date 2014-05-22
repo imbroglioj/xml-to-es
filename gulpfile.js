@@ -30,7 +30,7 @@ gulp.task('js', function(){
 });
 
 gulp.task('examples', function(){
-    return gulp.src(('examples/*.js'))
+    return gulp.src(('examples/*'))
         .pipe(gulp.dest('dist/examples'));
 
 });

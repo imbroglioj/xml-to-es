@@ -42,28 +42,31 @@ exports.IndexSpecPage = function (core, path, should) {
     self.testIndexAggregateFile = function (cb) {
         // use child procs and call on files
         var indexDir = path.resolve(process.cwd(), 'jsonTest');
-        if (fs.existsSync(indexDir)){
-            fs.readdirSync(indexDir, function(f){
+        if (fs.existsSync(indexDir)) {
+            fs.readdirSync(indexDir, function (f) {
                 fs.unlinkSync(path.join(indexDir, f));
             });
-        } else fs.mkDir(indexDir);
-        var config = page.makeJsonConfig(page.goodTags, {output : {destDir:indexDir, docsPerFile:0}});
+        } else fs.mkdirSync(indexDir);
+        var config = page.makeJsonConfig(page.goodTags, {output: {destDir: indexDir, docsPerFile: 0}});
         config.output.docsPerFile = 0;
         config.output.destDir = indexDir;
         new core.Parser(config).processFiles(function () {
             var jsFile = path.resolve(__dirname, '../examples/IndexFiles.js');
 
-            var config = IxF.resolveOptions({_: [indexDir], level:"WARN", config: argv.config});
+            var config = IxF.resolveOptions({_: [indexDir], level: "WARN", config: argv.config});
             var indexFiles = new IndexFiles(config);
             indexFiles.putMapping(config);
-            indexFiles.putFiles([indexDir]);
-            indexFiles.getDocumentCount(function(err, json){
-                should.not.exist(err);
-                should.exist(json);
-                should.exist(json.count);
-                json.count.should.be.greaterThan(0);
-                if (cb) cb();
-            });
+            // give time to make sure parser write is done.
+            setTimeout(function () {
+                indexFiles.putFiles([indexDir]);
+                indexFiles.getDocumentCount(function (err, json) {
+                    should.not.exist(err);
+                    should.exist(json);
+                    should.exist(json.count);
+                    json.count.should.be.greaterThan(0);
+                    if (cb) cb();
+                });
+            }, 1000);
         });
     };
 };

@@ -27,5 +27,5 @@ describe("sgml tests", function () {
 
     it('should handle test directory with 3 files', function(){
         page.testDirectory();
-    })
+    });
 });

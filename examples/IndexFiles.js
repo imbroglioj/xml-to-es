@@ -30,17 +30,17 @@ exports.IndexFiles = function (config) {
                 return;
             }
             try {
-                var json = JSON.parse(txt)
+                var json = JSON.parse(txt);
                 if (Array.isArray(json)) {
                     var sawErrors;
                     return json.forEach(function (obj) {
-                        self.submitObject(obj, f, function (err) {if (err) sawErrors = err});
+                        self.submitObject(obj, f, function (err) {if (err) sawErrors = err;});
                         if (cb) cb(sawErrors);
                     });
                 } // else
                 self.submitObject(json, f, cb);
             } catch (e) {
-                logger.error("Processing json from %s for submission.", f, e)
+                logger.error("Processing json from %s for submission.", f, e);
             }
         });
     };
@@ -187,10 +187,10 @@ exports.resolveOptions = function resolveOptions(argv, overrides) {
             else config[x] = overrides[x];
         });
     }
-    config.index.url = config.index.url
-        || util.format('http://%s:%d/%s/%s/', config.index.server, config.index.port, config.index.name, config.index.type);
-    config.index.createUrl = config.index.createUrl
-        || util.format('http://%s:%d/%s', config.index.server, config.index.port, config.index.name);
+    config.index.url = config.index.url ||
+        util.format('http://%s:%d/%s/%s/', config.index.server, config.index.port, config.index.name, config.index.type);
+    config.index.createUrl = config.index.createUrl ||
+        util.format('http://%s:%d/%s', config.index.server, config.index.port, config.index.name);
     if (argv.level) logger.setLevel(argv.level);
     config.logger = config.logger || logger;
     config.index.server = config.index.server || "localhost";
