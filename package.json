@@ -37,5 +37,5 @@
         "elasticsearch, xml, sgml"
     ],
     "author": "John Broglio",
-    "license": "Apache 2"
+    "license": "MIT"
 }
