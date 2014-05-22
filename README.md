@@ -29,14 +29,19 @@ _xml-to-es_ handles these by examining the XML/SGML input before it is JSON-ized
 
 It will not currently handle a
 sequence where the first document has a missing closing tag and the second document has a missing opening tag.  That
-would be possible but is left for future work as needed. (The input file _test/data/twoDocsNoSepTagsTest.sgm_ is
+would be possible but is left for future work as needed. (The input file ````test/data/twoDocsNoSepTagsTest.xml```` is
 available for
-experimentation on that problem.)
+experimentation on that problem. Note: extension is ````xml```` instead of ````sgm```` to protect tests.)
 
 ## Installation
 With [npm](http://github.com/isaacs/npm), just do:
 
     npm install xml-to-es
+
+Then, ````cd```` to xml-to-es directory and run:
+    npm install --production
+
+(This option does not install dev-dependencies.)
 
 For github:
 
@@ -47,10 +52,26 @@ For github:
 The ````examples```` and ````test```` directories show a number of ways to use and control these modules.
 
 ### Examples directory
-  * ````convert.js```` : uses lib/xml-to-es.js to convert XML/SGML to massaged JSON
+  * ````convert.js```` : uses ````lib/xml-to-es.js```` to convert XML/SGML to massaged JSON
   * ````indexFiles.js```` : using an index config file, will submit a set of JSON files for indexing to ElasticSearch
    (requires that ElasticSearch be running!)
-  * ````*-config.js```` : various input and output configuration files to be used with convert.js and indexFiles.js
+  * ````*-config.js```` : various input and output configuration files to be used with ````convert.js```` and
+  ````indexFiles.js````
+
+### JSON tweaks
+
+Some JSON tweaks are provided using the config file ````input```` property:
+
+  * ````promote````: move a nested element/object-property to be a top level object property
+  * ````flatten````: Somewhat like ````promote````, but typically used to remove noise from what should be an array.
+  Some SGML
+  kludges can create complicated object nesting in the JSON which can completely obscure the fact that we have an
+  array as a property value. (To see a _before_ example, temporarily remove the ````flatten```` property from a copy
+  of ````lewis-config.js````.) Once you
+  identify the offending XML tag ('d' for the Reuters collection), _xml-to-es_ will remove the extra tag and flatten
+  the array value by removing place-holder property names like '#'.
+
+# Example usage
 
 ## Conversion from XML/SGML to JSON/HTML
 
@@ -62,28 +83,26 @@ The ````examples```` and ````test```` directories show a number of ways to use a
   * CONFIG_FILE: a node.js module that controls the structure of the input and output
   * LOGLEVEL: default is DEBUG
 
-### Example
-
-    node examples/convert.js /data/reuters --config examples/json.config --level WARN
+__Example__: ````node examples/convert.js /data/reuters --config examples/json.config --level WARN````
 
 ## Indexing JSON files with ElasticSearch
 
-Make sure you have ElasticSearch running and listening at the default address.
+Make sure you have ElasticSearch running and listening at the server and port listed in the index config file.
 
     node examples/indexFiles.js FILES_OR_DIRECTORY --config INDEX_CONFIG
 
   * FILES_OR_DIRECTORY: filename, directory name or comma-delimited list of file/directory names which designate one
-  or more files of JSON documents. Unlike ElasticSearch, indexFiles.js can handle files with JSON arrays of documents.
+  or more files of JSON documents. Unlike ElasticSearch, ````indexFiles.js```` can handle files containing JSON
+  arrays of documents.
+
   NOTE: the 'id' field of each document will be submitted as the ID to ElasticSearch.
 
-### Example
-
-    node examples/indexFiles.js jsonFiles/ --config examples/index-es-config
+__Example__: ````node examples/indexFiles.js jsonFiles/ --config examples/index-es-config````
 
 
 ## Testing
 
-Change to xml-to-es directory:
+In you have mocha installed globally, ````cd```` to xml-to-es directory and run:
 
     mocha --reporter spec
 
