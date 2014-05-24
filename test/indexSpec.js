@@ -19,7 +19,7 @@ describe("sgml tests", function () {
     });
 
     it('should index json file aggr', function(done){
-        //this.timeout(2*60*1000);
+        this.timeout(2000);
        page.testIndexAggregateFile(done);
     });
 
