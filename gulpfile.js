@@ -16,7 +16,7 @@ var gulp = require('gulp'),
 
 
 gulp.task('default', ['clean'], function () {
-    gulp.start('test', 'js', 'examples', 'package', 'license', 'testFiles');
+    gulp.start('test', 'js', 'examples', 'package', 'top', 'testFiles');
 });
 
 gulp.task('testFiles', function () {
@@ -58,8 +58,8 @@ gulp.task('package',
         });
     });
 
-gulp.task('license', function(){
-    return gulp.src('LICENSE')
+gulp.task('top', function(){
+    return gulp.src(['LICENSE','CHANGES.md', 'index.js'])
         .pipe(gulp.dest('dist'));
 });
 
