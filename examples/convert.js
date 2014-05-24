@@ -5,14 +5,11 @@
  * Time: 12:01 PM
  */
 
-var core = require('../lib/xml-to-es'),
+var core = require('../index.js'),
     logger = core.logger,
     fs = require('fs'),
     util = require('util')
     ;
-
-
-var fileExt = '.json';
 
 process.on('uncaughtException', function (err) {
     logger.error("Uncaught error: " + util.inspect(err, {depth: null}) +
@@ -26,7 +23,7 @@ if (require.main === module) {
         .string('config')
         .argv;
 
-    var config = core.resolveOptions(argv);
+    var config = core.resolveParseOptions(argv);
     var parser = new core.Parser(config);
     parser.processFiles();
 }

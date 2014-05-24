@@ -7,12 +7,13 @@
 
 var should = require('chai').should()
     , path = require('path')
-    , core = require('../lib/xml-to-es')
+    , core = require('../index.js')
     , Page = require('./FileSpecPage.js').FileSpecPage
     ;
 
 describe("sgml tests", function () {
     var page= new Page(core, path, should);
+    core.logger.info("FileSpec: "+new Date());
     it('should handle one doc', function () {
         page.testSimpleConfig();
     });

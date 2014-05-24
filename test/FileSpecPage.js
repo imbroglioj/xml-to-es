@@ -19,7 +19,7 @@ exports.FileSpecPage = function (core, path, should) {
     self.goodTags = goodTags;
     self.badTags = badTags;
     self.makeJsonConfig = function (filename, overrides) {
-        return core.resolveOptions({
+        return core.resolveParseOptions({
             _: [path.join(__dirname, 'data', filename)],
             config: path.join(__dirname, '../examples/json-config.js'),
             level: 'error',

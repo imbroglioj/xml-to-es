@@ -11,7 +11,7 @@ var config = {
     index: {
         name: 'testxml__',
         type: 'doc',  // must match one of the types in mapping
-        settings: {number_of_shards: 1},
+        settings: {index: {number_of_shards: 1}},
         mapping: path.join(__dirname, './mapping.json'),
         ext: '.json',
         server: 'localhost',

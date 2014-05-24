@@ -39,6 +39,7 @@ With [npm](http://github.com/isaacs/npm), just do:
     npm install xml-to-es
 
 Then, ````cd```` to xml-to-es directory and run:
+
     npm install --production
 
 (This option does not install dev-dependencies.)

@@ -31,7 +31,7 @@ gulp.task('js', function () {
 });
 
 gulp.task('examples', function () {
-    return gulp.src(('examples/*'))
+    return gulp.src((['examples/*.js', 'examples/*.json']))
         .pipe(gulp.dest('dist/examples'));
 
 });
