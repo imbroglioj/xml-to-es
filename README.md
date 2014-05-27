@@ -48,6 +48,7 @@ For github:
 
    git clone http://github.com/imbroglioj/xml-to-es.git
 
+
 ## Documentation
 
 The ````examples```` and ````test```` directories show a number of ways to use and control these modules.
@@ -58,6 +59,13 @@ The ````examples```` and ````test```` directories show a number of ways to use a
    (requires that ElasticSearch be running!)
   * ````*-config.js```` : various input and output configuration files to be used with ````convert.js```` and
   ````indexFiles.js````
+
+#### Notes on running examples:
+  1. to run examples from the github checkout, you need to make sure your checkout directory is defaulted to
+````xml-to-es```` and that you define NODE_PATH to be the directory _above_ your ````xml-to-es```` directory.
+  2. If you have downloaded the module through npm, you can run examples in place from your top-level project directory.
+  3. If you want to copy ````convert.js```` or ````indexFiles.js```` to top level to experiment with modifying
+  them, you will have to install the ````optimist```` module (using ````npm````).
 
 ### JSON tweaks
 

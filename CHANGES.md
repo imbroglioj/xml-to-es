@@ -1,4 +1,8 @@
-# v.0.1.1   5-24-14
+# v0.1.2   May 27, 2014
+  * Changed ````require```` calls in ````examples```` scripts to suit npm usage, so that examples run correctly when
+   copied to a top level directory (above ````node_modules/xml-to-es````).
+
+# v0.1.1   May 24, 2014
 
  * Create index.js to collect API exports into one require.
  * Modify tests and examples to load index.js.

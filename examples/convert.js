@@ -5,7 +5,7 @@
  * Time: 12:01 PM
  */
 
-var core = require('../index.js'),
+var core = require('xml-to-es'),
     logger = core.logger,
     fs = require('fs'),
     util = require('util')
