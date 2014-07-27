@@ -13,9 +13,9 @@ var path = require('path'),
 
 exports.Parser = parser.Parser;
 exports.resolveParseOptions = parser.resolveOptions;
-exports.Generator = parser.Generation;
 
 exports.ElasticIndexer = indexer.ElasticIndexer;
 exports.resolveIndexOptions = indexer.resolveOptions;
 
 exports.logger = cheapLogger.logger;
+exports.optimist = require('optimist');
