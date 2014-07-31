@@ -1,3 +1,11 @@
+# v0.2.0  API additions but no breaking API changes (applies to 0.1.4, 0.1.5 as well)
+  * added
+    * ability to define your own generator in output config
+    * ability to specify a callback in output config to be called when all files are processed
+  * example to save json output to mongodb
+  * changed require calls back in examples/convert.js and example/indexFiles.js so that they can be run in place.
+    Added comment for developer to change them for use outside the examples dir.
+
 # v0.1.5
   * Skip indexing tests if ES is not running.
 

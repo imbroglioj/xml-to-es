@@ -5,7 +5,9 @@
  * Time: 12:01 PM
  */
 
-var core = require('xml-to-es'),
+var path = require('path'),
+// CHANGE next item to require('xml-to-es') if you copy file to another directory and xml-to-es is in node_modules
+    core = require(path.resolve(__dirname,'../index.js')),
     logger = core.logger,
     fs = require('fs'),
     util = require('util')
@@ -25,6 +27,6 @@ if (require.main === module) {
 
     var config = core.resolveParseOptions(argv);
     var parser = new core.Parser(config);
-    parser.processFiles();
+    parser.processFiles(config.output.callback);
 }
 

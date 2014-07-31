@@ -9,7 +9,8 @@
 // The mapping file is appropriate for the Lewis Reuters corpus
 
 var path = require('path')
-    , core = require('xml-to-es') //require(path.resolve(__dirname, '../index.js'))
+// CHANGE next item to require('xml-to-es') if you copy file to another directory and xml-to-es is in node_modules
+    , core = require(path.resolve(__dirname,'../index.js'))
     ;
 
 exports.IndexFiles = core.ElasticIndexer;  // v0.1.0 API back compatible; change for v0.2.0

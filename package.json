@@ -1,6 +1,6 @@
 {
     "name": "xml-to-es",
-    "version": "0.1.5",
+    "version": "0.2.0",
     "description": "Translates XML (or reasonable SGML) input into a JSON document suitable for ElasticSearch",
     "main": "./index.js",
     "dependencies": {
@@ -20,7 +20,8 @@
         "gulp-mocha": "~0.4.1",
         "gulp-plumber": "~0.6.1",
         "gulp-notify": "~1.2.5",
-        "gulp-rename" : "~1.2.0"
+        "gulp-rename" : "~1.2.0",
+        "mongoskin" : "~1.4.4"
     },
     "engines": {
         "node": "~0.10.22",
@@ -31,7 +32,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "git@bitbucket.org:jbroglio/xml-to-es.git"
+        "url": "http://github.com/imbroglioj/xml-to-es.git"
     },
     "keywords": [
         "elasticsearch, xml, sgml"
