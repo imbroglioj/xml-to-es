@@ -35,6 +35,7 @@ config.output = {
     generator: {
         type: "db",
         fn: function(data, cb){
+            if (data == ':done') return cb ? setImmediate(cb): null; // end of input
             xmltest.insert(data, function(err,docs){
                 if (err){
                     console.error(util.format("Error storing doc in db: %s on %j" ,err, util.inspect(data)));

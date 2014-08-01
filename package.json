@@ -1,6 +1,6 @@
 {
     "name": "xml-to-es",
-    "version": "0.2.0",
+    "version": "0.2.1",
     "description": "Translates XML (or reasonable SGML) input into a JSON document suitable for ElasticSearch",
     "main": "./index.js",
     "dependencies": {
