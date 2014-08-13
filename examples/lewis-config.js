@@ -20,7 +20,7 @@
 module.exports = {
     input : {
         preProcess: function(json, config){
-            console.log("preProcess: Processing file:"+config.input.currentFile);
+            //console.log("preProcess: Processing file:"+config.input.currentFile);
             return json;
         },
         fileExt: '.sgm',

@@ -29,4 +29,14 @@ describe("sgml tests", function () {
     it('should handle test directory with 3 files', function(){
         page.testDirectory();
     });
+
+    it('should handle deep-nested subdirs', function(){
+        page.testSubdirs();
+    });
+       
+    it('should handle space-delimited list of dirs', function(){
+        page.testSpaceDelim();
+
+    });
+       
 });

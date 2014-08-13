@@ -7,7 +7,8 @@
 
 var simpleFile = 'test.sgm',
     goodTags = 'goodTagsTest.sgm',
-    badTags = 'badTagsTest.sgm'
+    badTags = 'badTagsTest.sgm',
+util = require('util')
     ;
 
 
@@ -19,8 +20,16 @@ exports.FileSpecPage = function (core, path, should) {
     self.goodTags = goodTags;
     self.badTags = badTags;
     self.makeJsonConfig = function (filename, overrides) {
+        if (typeof overrides === 'string') {
+            fileext=overrides;
+            overrides = null;
+        }
+        var args = filename.split(/[,]|\s+/).map(function(f){
+            return path.join(__dirname, 'data', f);
+        });
+        //console.log(util.format("args: %j",args)); 
         return core.resolveParseOptions({
-            _: [path.join(__dirname, 'data', filename)],
+            _: args,
             config: path.join(__dirname, '../examples/json-config.js'),
             level: 'error',
             '$0': process.argv[0] + ' ' + process.argv[1]
@@ -80,4 +89,33 @@ exports.FileSpecPage = function (core, path, should) {
             docCount.should.equal(13);
         });
     };
+
+    self.testSubdirs = function(){
+        var config = self.makeJsonConfig('subdir', {input: { fileExt: ".xml"}});
+        var docCount = 0;
+        config.infiles.length.should.equal(3);
+        config.infiles[0].should.contain('.xml');
+        config.generator = function (json) {
+            if (jsonDone(json)) return;
+            docCount++;
+        };
+        new core.Parser(config).processFiles(function(){
+            docCount.should.equal(13);
+        });
+    }
+
+    self.testSpaceDelim = function(){
+        var config = self.makeJsonConfig("subdir/dir1 subdir/dir2 subdir/dir3", {input: { fileExt: ".xml"}});
+        var docCount = 0;
+        config.infiles.length.should.equal(3);
+        config.infiles[0].should.contain('.xml');
+        config.generator = function (json) {
+            if (jsonDone(json)) return;
+            docCount++;
+        };
+        new core.Parser(config).processFiles(function(){
+            docCount.should.equal(13);
+        });
+    }
+
 };

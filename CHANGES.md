@@ -1,3 +1,7 @@
+# v0.2.3
+  * fixed bug where giving a list of input file names (not comma delimited) gives an error.
+  * added recursive processing to subdirectories of directories submitted
+
 # v0.2.2
   * put input file path (or URI, or dbRef) on config.input.currentFile during runs
   * pass config to input-config preProcess function.
