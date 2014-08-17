@@ -1,3 +1,6 @@
+# v0.2.4
+  * substituted config.input.currentFile for config.inputFiles[0] where feasible
+
 # v0.2.3
   * fixed bug where giving a list of input file names (not comma delimited) gives an error.
   * added recursive processing to subdirectories of directories submitted
