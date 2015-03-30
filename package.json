@@ -4,6 +4,7 @@
     "description": "Translates XML (or reasonable SGML) input into a JSON document suitable for ElasticSearch",
     "main": "./index.js",
     "dependencies": {
+        "cheerio":"~0.18.0"
         "libxml-to-js": "~0.3.11",
         "optimist": "~0.6.1",
         "string_score": "~0.1.20",
