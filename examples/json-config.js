@@ -5,7 +5,7 @@
  * Time: 11:04 AM
  */
 
-var config = require('./lewis-config.js')
+var config = require('./lewis-input-config.js')
     ;
 // # config file for xml-to-es
 // * output : {

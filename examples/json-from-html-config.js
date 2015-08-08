@@ -1,11 +1,11 @@
-/** # json-config
- *  Extract text (title, body) for submission to openNLP programs
+/** json-config
+ *
  * author: jbroglio
  * Date: 5/13/14
  * Time: 11:04 AM
  */
 
-var config = require('./lewis-input-config.js')
+var config = require('./html-input-config.js')
     ;
 // # config file for xml-to-es
 // * output : {
@@ -18,10 +18,13 @@ var config = require('./lewis-input-config.js')
 //     0 =>   " unlimited
 // }
 config.output = {
-    fmt: "text",
-    fileExt: ".txt",
-    destDir: "./text-only",
-    docsPerFile: 1000
+    fmt: "JSON",
+    fileExt: ".json",
+    destDir: "./json",
+    docsPerFile: 1,
+    leadChar : '[', // for aggregating
+    trailChar : ']',
+    sepChar: ','
 };
 
 module.exports = config;

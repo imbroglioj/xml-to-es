@@ -5,7 +5,7 @@
  * Time: 11:04 AM
  */
 
-var config = require('./lewis-config.js')
+var config = require('./lewis-input-config.js')
     , mongo = require('mongoskin')  // this is in dev-dependencies
     , db = mongo.db('mongodb://localhost:27017/test?reconnect=true')
     , xmltest = db.collection('xmltest')

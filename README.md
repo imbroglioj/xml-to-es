@@ -89,7 +89,7 @@ Some JSON tweaks are provided using the config file ````input```` property:
     Some SGML kludges can create complicated object nesting in the JSON which can completely obscure the fact that we
   have an
   array as a property value. (To see a _before_ example, temporarily remove the ````flatten```` property from a copy
-  of ````lewis-config.js````.) Once you
+  of ````lewis-input-config.js````.) Once you
   identify the offending XML tag ('d' for the Reuters collection), _xml-to-es_ will remove the extra tag and flatten
   the array value by removing place-holder property names like '#'.
 

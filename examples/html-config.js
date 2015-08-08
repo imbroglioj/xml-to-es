@@ -14,10 +14,11 @@
 //     n => for search engines that handle multiple (html) docs in a file
 //     0 =>   " unlimited
 // }
-var config = require('./lewis-config.js');
+var config = require('./lewis-input-config.js');
 
 config.output = {
     fmt: "html",
+    filePrefix: 'aggr',
     docsPerFile: '100',
     fileExt: ".html",
     destDir: "./html"

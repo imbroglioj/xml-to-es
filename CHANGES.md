@@ -1,3 +1,7 @@
+# v0.2.5
+  * change lewis-config to lewis-input-config
+  * added cheerio for parsing html input
+
 # v0.2.4
   * substituted config.input.currentFile for config.inputFiles[0] where feasible
 
