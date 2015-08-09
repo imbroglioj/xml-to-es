@@ -1,3 +1,6 @@
+# v0.2.10
+  * fixes to ElasticIndexer
+
 # v0.2.5
   * change lewis-config to lewis-input-config
   * added cheerio for parsing html input

@@ -23,8 +23,9 @@ exports.IndexSpecPage = function (core, path, should) {
 
     self.testIndexSingleObject = function (done) {
         var config = page.makeJsonConfig(page.simpleFile);
-        config.generator = function (json) {
-            if (page.jsonDone(json)) return;
+        config.generator = function (json, cb) {
+            if (page.jsonDone(json))
+                return cb ? cb() : done? done(): null;
             var config = core.resolveIndexOptions(argv);
             var indexer = new core.ElasticIndexer(config);
             indexer.putMapping(function (err) {
@@ -32,15 +33,12 @@ exports.IndexSpecPage = function (core, path, should) {
                 indexer.submitObject(json, 'N/A', function (err) {
                     should.not.exist(err);
                     // callback since only one file
-                    if (done) {
-                        //core.logger.log("Calling Done on singleObject");
-                        done();
-                    }
+                    return cb ? cb() : done? done(): null;
                 });
             });
         };
 
-        new core.Parser(config).processFiles();
+        new core.Parser(config).processFiles(done);
     };
 
     // question should we just test file here
@@ -53,7 +51,8 @@ exports.IndexSpecPage = function (core, path, should) {
             });
         } else fs.mkdirSync(indexDir);
         var config = page.makeJsonConfig(page.goodTags, {output: {destDir: indexDir, docsPerFile: 0}});
-        new core.Parser(config).processFiles(function () {
+        new core.Parser(config).processFiles(function (err) {
+            if (err) return done? done() : null;
             var config = core.resolveIndexOptions({_: [indexDir], level: "WARN", config: argv.config});
             var indexer = new core.ElasticIndexer(config);
             indexer.putMapping(function (e) {
@@ -66,10 +65,7 @@ exports.IndexSpecPage = function (core, path, should) {
                         should.exist(json);
                         should.exist(json.count);
                         json.count.should.be.greaterThan(0);
-                        if (done) {
-                            // core.logger.log("Calling Done on aggregate");
-                            done();
-                        }
+                        done ? done() : null;
                     });
                 });
             });

@@ -6,7 +6,7 @@
  */
 
 var gulp = require('gulp'),
-    clean = require('gulp-clean'),
+    del = require('del'),
     mocha = require('gulp-mocha'),
     rename = require('gulp-rename'),
     plumber = require('gulp-plumber'),
@@ -63,9 +63,8 @@ gulp.task('top', function(){
         .pipe(gulp.dest('dist'));
 });
 
-gulp.task('clean', function () {
-    return gulp.src('dist/*', {read: false})
-        .pipe(clean());
+gulp.task('clean', function (cb) {
+    del(['dist/*'], cb);
 });
 
 gulp.task('test', function () {

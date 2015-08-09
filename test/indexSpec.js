@@ -12,6 +12,10 @@ var should = require('chai').should()
     ;
 var IndexSpecPage, page;
 
+process.on('uncaughtException', function(err){
+    core.logger.error("uncaughtException -- ", err);
+});
+
 describe("Index tests (results not valid if ES not running)", function () {
     core.logger.info("indexSpec: "+new Date());
     var noES;
@@ -32,6 +36,7 @@ describe("Index tests (results not valid if ES not running)", function () {
     }
     // is there a dynamic way to get mocha to skip tests?
     checkES(function(err){
+        if (err) expect.true.to.be(false);
         if (!err) {
             IndexSpecPage = require('./IndexSpecPage.js').IndexSpecPage,
                 page = new IndexSpecPage(core, path, should);
@@ -48,7 +53,7 @@ describe("Index tests (results not valid if ES not running)", function () {
     it('should index json file aggr', function(done) {
         checkES(function (err) {
             if (err) return done();
-            this.timeout(2000);
+            //this.timeout(2000);
             page.testIndexAggregateFile(done);
         });
     });
