@@ -35,7 +35,33 @@ exports.FileSpecPage = function (core, path, should) {
             '$0': process.argv[0] + ' ' + process.argv[1]
         }, overrides);
     };
+    self.makeJsonInlineConfig = function(filename, overrides){
+        if (typeof overrides === 'string') {
+            fileext=overrides;
+            overrides = null;
+        }
+        var args = filename.split(/[,]|\s+/).map(function(f){
+            return path.join(__dirname, 'data', f);
+        });
+        //console.log(util.format("args: %j",args));
+        var config=require('../examples/lewis-input-config.js');
+        config.output={
+            fmt: "JSON",
+            fileExt: ".json",
+            destDir: "./json",
+            docsPerFile: 1,
+            leadChar : '[', // for aggregating
+            trailChar : ']',
+            sepChar: ','
+        };
+        return core.resolveParseOptions({
+            _: args,
+            config: config,
+            level: 'error',
+            '$0': process.argv[0] + ' ' + process.argv[1]
+        }, overrides);
 
+    };
     self.testSimpleConfig = function(){
         var config = self.makeJsonConfig(simpleFile);
         config.generator = function (json) {

@@ -1,3 +1,6 @@
+# v0.2.11
+  * allow parser and indexer to take config as an object as well as a filename
+
 # v0.2.10
   * fixes to ElasticIndexer
 
