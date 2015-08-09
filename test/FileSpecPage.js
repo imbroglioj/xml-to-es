@@ -64,6 +64,7 @@ exports.FileSpecPage = function (core, path, should) {
     };
     self.testSimpleConfig = function(){
         var config = self.makeJsonConfig(simpleFile);
+        // setting generator like this short-circuits generator finding. Don't use it in code.
         config.generator = function (json) {
             if (jsonDone(json)) return;
             console.log("Using TEST generator");
@@ -81,6 +82,7 @@ exports.FileSpecPage = function (core, path, should) {
 
         var config = self.makeJsonConfig(filename);
         var docs=[];
+        // setting generator like this short-circuits generator finding. Don't use it in code.
         config.generator = function (json) {
             if (jsonDone(json)) return;
             docs.push(json);
@@ -107,6 +109,7 @@ exports.FileSpecPage = function (core, path, should) {
         var config = self.makeJsonConfig('');
         var docCount = 0;
         config.infiles.length.should.equal(3);
+        // setting generator like this short-circuits generator finding. Don't use it in code.
         config.generator = function (json) {
             if (jsonDone(json)) return;
             docCount++;

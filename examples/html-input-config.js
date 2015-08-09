@@ -7,6 +7,8 @@
 
 // # input config file for xml-to-es
 // * input : {
+//   * preProcess: function(json, config) allows you to do whatever you want to json after parsing
+//     and before standard processing (deletes, renames, etc.)
 //   * promote: which values should be moved to top level: foo.key.key2 => foo.key2
 //   * flatten: which XML elements are place-holders and should be removed with their contentents subsumed under the parent key
 //        Example: <PLACES><D>usa</D><D>ussr</D></PLACES will be turned into an array by lib2xml as:

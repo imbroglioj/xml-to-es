@@ -1,3 +1,7 @@
+# v0.2.12
+  * handle setConfig property in output.generator so that generator can insure that it has
+    the final version of the config object.
+
 # v0.2.11
   * allow parser and indexer to take config as an object as well as a filename
 

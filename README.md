@@ -99,18 +99,25 @@ The output-config must ````require```` the input-config you want.
 The output config file (examples: ````json-config.js````, ````db-config.js````, ````text-only-config.js````) give
 examples of the output options.
 
-  * fmt : format of the output (html, json, text, USER_SUPPLIED_GENERATOR_FORMAT)
+  * fmt: JSON|HTML or whatever formats you might add to Generation.js
   * noFile: true if there is a user-supplied generator and it creates its own output sink
   * fileExt: extension of the output file (the output file name is created from the input file name, the JSON id
-    property and the fileExt
+    property and the output.fileExt)
+  * destDir: directory for output files
   * docsPerFile:
     * 0: put everything in one output file
     * 1: 1 output file per XML/SGML input
     * 100: 1 output file for every 100 XML/SGML input files
-    * leadChar, sepChar, trailChar: in case of multiple documents per output file, how to group them (````[ , ]````
-      for JSON
-    * generator: for supplying your own output handler (see ````examples/db-config````)
-
+  * leadChar, sepChar, trailChar: in case of multiple documents per output file, how to group them (````[ , ]````
+    for JSON
+  * generator: an object for supplying your own output handler (see also ````examples/db-config````)
+      {type: /* SAME as fmt value */,
+       fn: if (noFile == true) fn: function(data, cb)
+           else fn : function(stream, data, cb)
+       setConfig: function(conf) that sets the closure var config to the actual current complete config
+       }
+    note: type value __must__ match fmt property value due to internal issues.
+          (If 'fmt' is undefined it will be set to the 'type' value)
 
 
 # Example usage

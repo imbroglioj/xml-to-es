@@ -24,16 +24,19 @@ xmltest.drop();
 //     0 =>   " unlimited
 //   * noFile : set to true if you are supplying a generator that handles its own destination(s)
 //   * generator : object:
-//        {type: /* SAME as fmt value */, fn: /* 2 choices */ };
-//     note: type value __must__ match fmt property value due to internal. (If 'fmt' is undefined it will be set to
-//        the 'type' value
-//     if (noFile == true) fn: function(data, cb)
-//     else fn : function(stream, data, cb)
-// }
+//        {type: /* SAME as fmt value */,
+//         fn: if (noFile == true) fn: function(data, cb)
+//             else fn : function(stream, data, cb)
+//         setConfig: function(conf) that sets the closure var config to the actual current complete config
+//         }
+//     note: type value __must__ match fmt property value due to internal issues.
+//           (If 'fmt' is undefined it will be set to the 'type' value)
+//
 config.output = {
     noFile: true,
     generator: {
         type: "db",
+        setConfig: function(c){config = c;},
         fn: function(data, cb){
             if (data == ':done') return cb ? setImmediate(cb): null; // end of input
             xmltest.insert(data, function(err,docs){
