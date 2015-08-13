@@ -1,3 +1,6 @@
+# v0.2.13
+  * fix logger npe in Generation.js
+
 # v0.2.12
   * handle setConfig property in output.generator so that generator can insure that it has
     the final version of the config object.
