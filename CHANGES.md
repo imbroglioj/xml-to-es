@@ -1,3 +1,6 @@
+# v0.2.15
+  * make test of fmt and type case-insensitive by using regexp
+
 # v0.2.14
   * throw exception if ignoring user's generator
 
