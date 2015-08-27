@@ -1,3 +1,6 @@
+# v0.2.14
+  * throw exception if ignoring user's generator
+
 # v0.2.13
   * fix logger npe in Generation.js
 
