@@ -12,10 +12,10 @@ var path = require('path'),
     ;
 
 exports.Parser = parser.Parser;
-exports.resolveParseOptions = parser.resolveOptions;
+exports.resolveParseOptions = parser.resolveClOptions;
 
 exports.ElasticIndexer = indexer.ElasticIndexer;
-exports.resolveIndexOptions = indexer.resolveOptions;
+exports.resolveIndexOptions = indexer.resolveClOptions;
 
 exports.logger = cheapLogger.logger;
 exports.optimist = require('optimist');

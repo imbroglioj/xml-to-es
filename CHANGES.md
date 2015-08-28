@@ -1,3 +1,6 @@
+# v0.2.16
+  * If config.index exists, initialize the indexer.
+
 # v0.2.15
   * make test of fmt and type case-insensitive by using regexp
 

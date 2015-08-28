@@ -37,22 +37,21 @@ exports.IndexSpecPage = function (core, path, should) {
         level: 'error'
     };
     self.testIndexSingleObject = function (done) {
-        var config = filePage.makeJsonInlineConfig(filePage.simpleFile);
-        var indexer = new core.ElasticIndexer(core.resolveIndexOptions(argvInline));
+        var config = filePage.makeJsonInlineConfig(filePage.simpleFile, argvInline.config);
         config.generator = function (json, cb) {
             if (filePage.jsonDone(json))
                 return cb ? cb() : done ? done() : null;
-            indexer.putMapping(function (err) {
+            config.indexer.putMapping(function (err) {
                 should.not.exist(err);
-                indexer.submitObject(json, 'N/A', function (err) {
+                config.indexer.submitObject(json, 'N/A', function (err) {
                     should.not.exist(err);
                     // callback since only one file
-                    indexer.deleteIndex(cb || done);
+                    config.indexer.deleteIndex(cb || done);
                 });
             });
         };
 
-        indexer.deleteIndex(indexer.getConfig().index.url, function (err) {
+        config.indexer.deleteIndex(config.indexer.getConfig().index.url, function (err) {
             if (err) return true.should.be.false();
 
             new core.Parser(config).processFiles(done);
@@ -68,30 +67,30 @@ exports.IndexSpecPage = function (core, path, should) {
                 fs.unlinkSync(path.join(indexDir, f));
             });
         } else fs.mkdirSync(indexDir);
-        var config = filePage.makeJsonConfig(filePage.goodTags, {output: {destDir: indexDir, docsPerFile: 0}});
-        var indexer = new core.ElasticIndexer(core.resolveIndexOptions(
-            {
+        var config = filePage.makeJsonConfig(filePage.goodTags,
+            {output: {destDir: indexDir, docsPerFile: 0}});
+        core.resolveIndexOptions({
                 _: [indexDir],
-                level: "WARN",
+            level: "WARN",
                 config: argv.config,
                 clean: true
-            }));
-        indexer.deleteIndex(indexer.getConfig().index.url, function (err) {
+            });
+        config.indexer.deleteIndex(config.indexer.getConfig().index.url, function (err) {
             if (err) return true.should.be.false();
 
             new core.Parser(config).processFiles(function (err) {
                 if (err) return done ? done() : null;
-                indexer.putMapping(function (e) {
+                config.indexer.putMapping(function (e) {
                     should.not.exist(e);
                     // give time to make sure parser write is done. todo: making writestream async is tough, but try it.
-                    indexer.putFiles([indexDir], function (e1) {
+                    config.indexer.putFiles([indexDir], function (e1) {
                         should.not.exist(e1);
-                        indexer.getDocumentCount(function (e2, json) {
+                        config.indexer.getDocumentCount(function (e2, json) {
                             should.not.exist(e2);
                             should.exist(json);
                             should.exist(json.count);
                             json.count.should.be.greaterThan(0);
-                            indexer.deleteIndex(done);
+                            config.indexer.deleteIndex(done);
                         });
                     });
                 });

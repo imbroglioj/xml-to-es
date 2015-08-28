@@ -13,10 +13,6 @@ var path = require('path')
     , core = require(path.resolve(__dirname,'../index.js'))
     ;
 
-exports.IndexFiles = core.ElasticIndexer;  // v0.1.0 API back compatible; change for v0.2.0
-exports.ElasticIndexer = core.ElasticIndexer;
-exports.resolveOptions = core.resolveIndexOptions;
-
 if (require.main === module) {
     var argv = require('optimist')
         .usage('USAGE: $0 INPUT_FILES --config INDEX_CONFIG [-- clean [false] [--level LOGLEVEL]')
@@ -33,13 +29,13 @@ if (require.main === module) {
         })
         .argv;
     var config = core.resolveIndexOptions(argv);
-    var indexer = new core.ElasticIndexer(config);
-    indexer.putMapping(function (err) {
+
+    config.indexer.putMapping(function (err) {
         if (err) return; // already logged
-        indexer.putFiles(argv._[0].split([',']), function (err) {
+        config.indexer.putFiles(argv._[0].split([',']), function (err) {
             // err signaled already
             if (err) return;
-            indexer.getDocumentCount(function (err, res) {
+            config.indexer.getDocumentCount(function (err, res) {
                 if (!err) console.log('Index count info: ' + res.count);
             });
         });
