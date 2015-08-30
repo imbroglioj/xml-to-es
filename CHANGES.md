@@ -1,3 +1,6 @@
+# v0.2.17
+  * Check that database has been created and attempt to create if not.
+
 # v0.2.16
   * If config.index exists, initialize the indexer.
 
