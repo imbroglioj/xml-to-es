@@ -1,3 +1,6 @@
+# v0.3.1 
+  * handle filename properly when id is "" or " ", etc.
+
 # v0.3.0
   * BREAKING CHANGE: config.input.preProcess takes a callback argument cb(json). This enables async processing in
   preprocess (doh).
