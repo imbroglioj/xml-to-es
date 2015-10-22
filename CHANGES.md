@@ -1,3 +1,7 @@
+# v0.3.0
+  * BREAKING CHANGE: config.input.preProcess takes a callback argument cb(json). This enables async processing in
+  preprocess (doh).
+
 # v0.2.17
   * Check that database has been created and attempt to create if not.
 
