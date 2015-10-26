@@ -1,4 +1,7 @@
-# v0.3.1 
+# v0.3.2
+  * make generators available in Generation.js
+
+# v0.3.1
   * handle filename properly when id is "" or " ", etc.
 
 # v0.3.0
