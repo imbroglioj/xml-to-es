@@ -1,3 +1,9 @@
+# v0.3.5
+  * Add and correct added generator test
+
+# v0.3.4
+  * fix make generators available in Generation.js
+
 # v0.3.3
   * Fixed setGenerator produced incorrect structure.
 

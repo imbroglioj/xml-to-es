@@ -6,7 +6,7 @@
  */
 
 var config = require('./html-input-config.js')
-    ;
+  ;
 // # config file for xml-to-es
 // * output : {
 //   * fmt: JSON|HTML or whatever formats you might add to Generation.js
@@ -17,23 +17,28 @@ var config = require('./html-input-config.js')
 //     n => for search engines that handle multiple (html) docs in a file
 //     0 =>   " unlimited
 // }
+var generators;
 config.output = {
   generator: {
     setConfig: function (c) {
       config = c;
     },
     type: 'JSON',
-    fn: function (generation, output, json, cb) {
-      generation.generators.generateJson(output, json, cb);
+    fn: function (output, json, cb) {
+      if (!generators) {
+        var Generators = require('../index.js').Generators;
+        generators = new Generators(config);
+      }
+      generators.generateJson(output, json, cb);
     }
   },
-    fmt: "JSON",
-    fileExt: ".json",
-    destDir: "./json",
-    docsPerFile: 1,
-    leadChar : '[', // for aggregating
-    trailChar : ']',
-    sepChar: ','
+  fmt: "JSON",
+  fileExt: ".json",
+  destDir: "./json",
+  docsPerFile: 1,
+  leadChar: '[', // for aggregating
+  trailChar: ']',
+  sepChar: ','
 };
 
 module.exports = config;

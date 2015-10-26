@@ -11,6 +11,7 @@ var path = require('path'),
     cheapLogger = require(path.resolve(__dirname,'lib/cheap-logger.js'))
     ;
 
+exports.Generators = require(path.resolve(__dirname,'lib/Generators.js')).Generators;
 exports.Parser = parser.Parser;
 exports.resolveParseOptions = parser.resolveClOptions;
 
