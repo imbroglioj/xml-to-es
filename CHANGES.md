@@ -1,3 +1,6 @@
+# v0.3.3
+  * Fixed setGenerator produced incorrect structure.
+
 # v0.3.2
   * make generators available in Generation.js
 

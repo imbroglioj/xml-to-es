@@ -17,11 +17,12 @@
 var config = require('./lewis-input-config.js');
 
 config.output = {
-    fmt: "html",
-    filePrefix: 'aggr',
-    docsPerFile: '100',
-    fileExt: ".html",
-    destDir: "./html"
+
+  fmt: "html",
+  filePrefix: 'aggr',
+  docsPerFile: '100',
+  fileExt: ".html",
+  destDir: "./html"
 };
 
 module.exports = config;

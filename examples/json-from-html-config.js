@@ -18,6 +18,15 @@ var config = require('./html-input-config.js')
 //     0 =>   " unlimited
 // }
 config.output = {
+  generator: {
+    setConfig: function (c) {
+      config = c;
+    },
+    type: 'JSON',
+    fn: function (generation, output, json, cb) {
+      generation.generators.generateJson(output, json, cb);
+    }
+  },
     fmt: "JSON",
     fileExt: ".json",
     destDir: "./json",
