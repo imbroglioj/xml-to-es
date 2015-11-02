@@ -1,3 +1,6 @@
+# v0.3.6
+  * Fix bug in Generation.js, line 69, createOneDocPerFile not running callback.
+
 # v0.3.5
   * Add and correct added generator test
 
