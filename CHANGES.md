@@ -1,3 +1,6 @@
+# v0.3.7
+  * use setImmediate to trim stack on callbacks
+
 # v0.3.6
   * Fix bug in Generation.js, line 69, createOneDocPerFile not running callback.
 
