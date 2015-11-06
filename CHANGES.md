@@ -1,6 +1,8 @@
-# v0.3.7
+# v0.3.8
+<<<<<<< HEAD
   * Fixed resolving generator fn in nofile case
-
+# v0.3.7
+  * use setImmediate to trim stack on callbacks
 # v0.3.6
   * Fix bug in Generation.js, line 69, createOneDocPerFile not running callback.
 
