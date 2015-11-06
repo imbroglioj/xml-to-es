@@ -1,3 +1,6 @@
+# v0.3.7
+  * Fixed resolving generator fn in nofile case
+
 # v0.3.6
   * Fix bug in Generation.js, line 69, createOneDocPerFile not running callback.
 
