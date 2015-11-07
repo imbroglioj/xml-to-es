@@ -102,7 +102,7 @@ examples of the output options.
   * fmt: JSON|HTML or whatever formats you might add to Generation.js
   * noFile: true if there is a user-supplied generator and it creates its own output sink
   * fileExt: extension of the output file (the output file name is created from the input file name, the JSON id
-    property and the output.fileExt)
+    property and the output.fileExt).  IF REGEX, terminate with "$"
   * destDir: directory for output files
   * docsPerFile:
     * 0: put everything in one output file
