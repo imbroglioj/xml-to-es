@@ -1,3 +1,7 @@
+# v0.3.10
+  * Broke out collectFiles from parseOptions processing to make multi-threaded (Cluster) use easier;
+  * Demoted ElasticIndexer.js log message from INFO to DEBUG.
+
 # v0.3.9
   * Fixed bug where fileExt is applied not to end of filename but only to formal extension.
 

@@ -14,7 +14,7 @@ var path = require('path'),
 exports.Generators = require(path.resolve(__dirname,'lib/Generators.js')).Generators;
 exports.Parser = parser.Parser;
 exports.resolveParseOptions = parser.resolveClOptions;
-
+exports.collectFiles = parser.collectFiles;
 exports.ElasticIndexer = indexer.ElasticIndexer;
 exports.resolveIndexOptions = indexer.resolveClOptions;
 
