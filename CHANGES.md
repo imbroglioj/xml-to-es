@@ -1,3 +1,7 @@
+# v0.3.12
+  * bug when no mapping: ElasticIndexer:224
+  * bug when no src in xml-to-es:deepExtend: 366
+
 # v0.3.11
   * Refixed bug where fileExt is more than just the extension
 
