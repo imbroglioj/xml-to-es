@@ -1,3 +1,6 @@
+# v0.3.13
+  * can handle .gz files now
+
 # v0.3.12
   * bug when no mapping: ElasticIndexer:224
   * bug when no src in xml-to-es:deepExtend: 366
