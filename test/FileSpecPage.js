@@ -8,7 +8,8 @@
 var simpleFile = 'test.sgm',
     goodTags = 'goodTagsTest.sgm',
     badTags = 'badTagsTest.sgm',
-util = require('util')
+  goodTagsgz = 'goodTagsTest.sgm.gz',
+  util = require('util')
     ;
 
 
@@ -18,6 +19,7 @@ exports.FileSpecPage = function (core, path, should) {
     self.jsonDone = jsonDone;
     self.simpleFile = simpleFile;
     self.goodTags = goodTags;
+    self.goodTagsgz = goodTagsgz;
     self.badTags = badTags;
     self.makeJsonConfig = function (filename, overrides) {
         if (typeof overrides === 'string') {
@@ -99,6 +101,10 @@ exports.FileSpecPage = function (core, path, should) {
 
     self.testGoodTags = function() {
         self.testTags(goodTags, /^[0-9]+/);
+    };
+
+    self.testGoodTagsGz = function() {
+        self.testTags(goodTagsgz, /^[0-9]+/);
     };
 
     self.testBadTags = function(){

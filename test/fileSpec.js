@@ -22,6 +22,10 @@ describe("sgml tests", function () {
         page.testGoodTags();
     });
 
+    it('should handle gzipped file', function(){
+        page.testGoodTagsGz();
+    });
+
     it('should handle 6 docs with bad sgml', function(){
         page.testBadTags();
     });
