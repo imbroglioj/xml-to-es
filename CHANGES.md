@@ -1,3 +1,6 @@
+# v0.3.16
+  * used setimmediate to drop stack and hopefully buffer
+
 # v0.3.15
   * simplified gz
 
