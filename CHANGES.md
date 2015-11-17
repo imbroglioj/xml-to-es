@@ -1,3 +1,6 @@
+# v0.3.17
+  * add README.md to npm dist
+  
 # v0.3.16
   * used setimmediate to drop stack and hopefully buffer
 

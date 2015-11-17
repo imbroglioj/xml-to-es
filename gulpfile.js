@@ -59,7 +59,7 @@ gulp.task('package',
     });
 
 gulp.task('top', function(){
-    return gulp.src(['LICENSE','CHANGES.md', 'index.js'])
+    return gulp.src(['LICENSE','CHANGES.md', 'index.js','README.md'])
         .pipe(gulp.dest('dist'));
 });
 
