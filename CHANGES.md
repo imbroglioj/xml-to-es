@@ -1,3 +1,6 @@
+# v0.3.15
+  * simplified gz
+
 # v0.3.14
   * fixed test to handle gz filename properly
 
