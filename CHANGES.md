@@ -1,3 +1,6 @@
+# v0.3.14
+  * fixed test to handle gz filename properly
+
 # v0.3.13
   * can handle .gz files now
 

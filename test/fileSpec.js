@@ -22,10 +22,6 @@ describe("sgml tests", function () {
         page.testGoodTags();
     });
 
-    it('should handle gzipped file', function(){
-        page.testGoodTagsGz();
-    });
-
     it('should handle 6 docs with bad sgml', function(){
         page.testBadTags();
     });
@@ -42,5 +38,9 @@ describe("sgml tests", function () {
         page.testSpaceDelim();
 
     });
-       
+    // last because other tests use uninitialized config...
+    it('should handle gzipped file', function(){
+        page.testGoodTagsGz();
+    });
+
 });
