@@ -1,3 +1,6 @@
+# v0.3.18
+  * gz not initializing xml, so documents accumulating
+
 # v0.3.17
   * add README.md to npm dist
   
