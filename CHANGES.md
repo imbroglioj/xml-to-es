@@ -1,3 +1,6 @@
+# v0.3.19
+  * report empty xml file instead of throwing error
+
 # v0.3.18
   * gz not initializing xml, so documents accumulating
 
