@@ -1,3 +1,6 @@
+# v0.3.20
+  * update superagent requirement
+  
 # v0.3.19
   * add format to String.prototype ("{0}=={1}".format("this","that") ==> "this==that"
   * make html generator async safe so that it doesn't exit before writing is finished.

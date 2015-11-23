@@ -50,8 +50,9 @@ exports.IndexSpecPage = function (core, path, should) {
                 });
             });
         };
-
-        config.indexer.deleteIndex(config.indexer.getConfig().index.url, function (err) {
+        // get updated config
+        config = config.indexer.getConfig();
+        config.indexer.deleteIndex(config.indexer.indexTypeUrl, function (err) {
             if (err) return true.should.be.false();
 
             new core.Parser(config).processFiles(done);
@@ -68,14 +69,16 @@ exports.IndexSpecPage = function (core, path, should) {
             });
         } else fs.mkdirSync(indexDir);
         var config = filePage.makeJsonConfig(filePage.goodTags,
-            {output: {destDir: indexDir, docsPerFile: 0}});
+             {input:{fileExt:'.sgm'}, output: {destDir: indexDir, docsPerFile: 0}});
         core.resolveIndexOptions({
                 _: [indexDir],
             level: "WARN",
                 config: argv.config,
                 clean: true
             });
-        config.indexer.deleteIndex(config.indexer.getConfig().index.url, function (err) {
+        // get updated config
+        config = config.indexer.getConfig();
+        config.indexer.deleteIndex(config.indexer.indexTypeUrl, function (err) {
             if (err) return true.should.be.false();
 
             new core.Parser(config).processFiles(function (err) {
