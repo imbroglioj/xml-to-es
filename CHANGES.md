@@ -1,4 +1,7 @@
 # v0.3.21
+  * Fix to drill for list of input directories: do not exit if one file is missing, just make a note.
+
+# v0.3.21
   * update superagent requirement
   
 # v0.3.20
