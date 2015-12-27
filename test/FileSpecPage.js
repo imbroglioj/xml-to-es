@@ -9,6 +9,7 @@ var simpleFile = 'test.sgm',
   goodTags = 'goodTagsTest.sgm',
   badTags = 'badTagsTest.sgm',
   goodTagsgz = 'goodTagsTest.sgm.gz',
+  goodTagsZip = 'goodTagsTest.sgm.zip',
   util = require('util')
   ;
 
@@ -107,6 +108,10 @@ exports.FileSpecPage = function (core, path, should) {
 
   self.testGoodTagsGz = function () {
     self.testTags(goodTagsgz, /^[0-9]+/, {input:{fileExt:'.sgm.gz'}});
+  };
+
+  self.testGoodTagsZip = function () {
+    self.testTags(goodTagsZip, /^[0-9]+/, {input:{fileExt:'.sgm.zip'}});
   };
 
   self.testBadTags = function () {

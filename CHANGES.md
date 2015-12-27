@@ -1,3 +1,6 @@
+# v0.3.21
+  * can handle single-entry zip files.  todo: multiple entries
+
 # v0.3.20
   * report empty xml file instead of throwing error
 

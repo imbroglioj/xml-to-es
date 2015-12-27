@@ -43,4 +43,8 @@ describe("sgml tests", function () {
         page.testGoodTagsGz();
     });
 
+    it('should handle zipped file', function(){
+        page.testGoodTagsZip();
+    });
+
 });
