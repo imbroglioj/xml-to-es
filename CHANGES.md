@@ -1,3 +1,6 @@
+# v0.3.24
+  * fix ref to adm-zip in the wrong dependency group
+
 # v0.3.23
   * can handle single-entry zip files.  todo: multiple entries
 
