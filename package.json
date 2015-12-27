@@ -1,6 +1,6 @@
 {
     "name": "xml-to-es",
-    "version": "0.3.21",
+    "version": "0.3.23",
     "description": "Translates XML (or reasonable SGML) input into a JSON document suitable for ElasticSearch",
     "main": "./index.js",
     "dependencies": {
@@ -8,7 +8,7 @@
         "libxml-to-js": "~0.3.11",
         "optimist": "~0.6.1",
         "string_score": "~0.1.20",
-        "superagent": "~0.18.0"
+        "superagent": "~1.4.0"
     },
     "jshintConfig": {
         "laxcomma": true

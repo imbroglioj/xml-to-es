@@ -1,6 +1,12 @@
-# v0.3.21
+# v0.3.23
   * can handle single-entry zip files.  todo: multiple entries
 
+# v0.3.22
+  * Fix to drill for list of input directories: do not exit if one file is missing, just make a note.
+
+# v0.3.21
+  * update superagent requirement
+  
 # v0.3.20
   * report empty xml file instead of throwing error
 
