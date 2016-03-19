@@ -1,3 +1,6 @@
+# v0.3.25
+  * switch to xml2js in order to have bi-directional. (good performance!)
+
 # v0.3.24
   * fix ref to adm-zip in the wrong dependency group
 

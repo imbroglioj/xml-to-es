@@ -1,11 +1,11 @@
 {
   "name": "xml-to-es",
-  "version": "0.3.24",
+  "version": "0.3.25",
   "description": "Translates XML (or reasonable SGML) input into a JSON document suitable for ElasticSearch",
   "main": "./index.js",
   "dependencies": {
     "cheerio": "~0.18.0",
-    "libxml-to-js": "~0.3.11",
+    "xml2js": "~0.4.14",
     "optimist": "~0.6.1",
     "string_score": "~0.1.20",
     "superagent": "~1.4.0",
@@ -27,7 +27,7 @@
   },
   "engines": {
     "node": "~0.10.22",
-    "ElasticSearch": "~1.0.1"
+    "ElasticSearch": "~1.7.3"
   },
   "scripts": {
     "test": "mocha --reporter spec"
