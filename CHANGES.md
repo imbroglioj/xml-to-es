@@ -1,3 +1,6 @@
+# v0.3.26
+  * added options to new xml2js: attrkey: @, charkey: #, explicitarray: false == not default children to array
+
 # v0.3.25
   * switch to xml2js in order to have bi-directional. (good performance!)
 
