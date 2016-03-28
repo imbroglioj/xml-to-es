@@ -1,3 +1,6 @@
+# v0.3.27
+  * Fixed generation (for html typically) to produce correct output filename
+
 # v0.3.26
   * added options to new xml2js: attrkey: @, charkey: #, explicitarray: false == not default children to array
 
