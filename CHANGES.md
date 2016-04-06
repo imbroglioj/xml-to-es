@@ -1,3 +1,6 @@
+# v0.3.29
+  * Was failing on large files (~1 GB) with multiple xml docs. Fixed by passing keeping buffer small.
+
 # v0.3.28
   * fix for new bug single file fileExt missing
 
