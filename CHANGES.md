@@ -1,3 +1,6 @@
+# v0.3.31
+  * fixes missed assignment on previous fix
+
 # v0.3.30
   * handle <?xml in embedded documents
 
