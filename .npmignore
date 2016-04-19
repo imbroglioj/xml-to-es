@@ -1,0 +1,13 @@
+json
+*.log
+*~
+.idea
+*.iml
+errs
+node_modules
+reut.sh
+html
+dist
+tmp
+jsonTest
+*.bak
