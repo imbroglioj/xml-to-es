@@ -1,3 +1,6 @@
+# v0.3.33
+  * handle file with just whitespace in it
+
 # v0.3.32 (31 was a false save)
   * fixes missed assignment on previous fix
 
