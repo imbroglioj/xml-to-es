@@ -1,3 +1,6 @@
+# v0.3.34
+  * did not handle \n<?xml...
+
 # v0.3.33
   * handle file with just whitespace in it
 
