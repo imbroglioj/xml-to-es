@@ -1,3 +1,6 @@
+# v0.4.3
+  * Bug if infile list ends in comma, drill finds random files from null "directory".
+
 # v0.4.2
   * Error on no closing element visible and no more input
 
