@@ -1,3 +1,7 @@
+# v0.4.0
+  * processFiles takes a second optional argument for a progress callback (config, msg)
+  * changed engine to Node v4.2.2+ (0.10.29 gives errors on the tests for odd reasons)
+
 # v0.3.34
   * did not handle \n<?xml...
 
