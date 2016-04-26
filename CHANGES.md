@@ -1,3 +1,6 @@
+# v0.4.2
+  * Error on no closing element visible and no more input
+
 # v0.4.1
   * Error from ElasticIndexer submitObject gives file in http error message
 
