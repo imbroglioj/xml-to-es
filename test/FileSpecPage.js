@@ -79,7 +79,10 @@ exports.FileSpecPage = function (core, path, should) {
       json.body.should.contain("Biogen");
       json.title.should.contain('BIOGEN');
     };
-    new core.Parser(config).processFiles();
+    new core.Parser(config).processFiles(function(){},
+    function(config, msg){
+      msg.should.contain("Starting");
+    });
   };
 
 

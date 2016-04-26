@@ -21,7 +21,8 @@ module.exports = {
     input : {
         preProcess: function(json, config, cb){
             //console.log("preProcess: Processing file:"+config.input.currentFile);
-          return cb ? setImmediate(cb,json) : json;
+            if (json.reuters && Object.keys(json).length===1) json=json.reuters;
+            return cb ? setImmediate(cb,json) : json;
         },
         fileExt: '.sgm',
         promote: {
