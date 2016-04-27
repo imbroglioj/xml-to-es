@@ -22,9 +22,8 @@
 module.exports = {
     input : {
         preProcess: function(config, cb){
-            var json=config.json;
             //console.log("preProcess: Processing file:"+config.input.currentFile);
-          return cb ? setImmediate(cb,json) : json;
+          return cb ? setImmediate(cb) : config.json;
         },
         fmt: 'html',
         fileExt: '.html?',

@@ -19,11 +19,10 @@
 
 module.exports = {
     input : {
-        preProcess: function(json, config, cb){
-            var json=config.json;
+        preProcess: function(config, cb){
             //console.log("preProcess: Processing file:"+config.input.currentFile);
-            if (json.reuters && Object.keys(json).length===1) json=json.reuters;
-            return cb ? setImmediate(cb,json) : json;
+            if (config.json.reuters && Object.keys(config.json).length===1) config.json=config.json.reuters;
+            return cb ? setImmediate(cb) : config.json;
         },
         fileExt: '.sgm',
         promote: {

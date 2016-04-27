@@ -17,6 +17,6 @@ exports.resolveParseOptions = parser.resolveClOptions;
 exports.collectFiles = parser.collectFiles;
 exports.ElasticIndexer = indexer.ElasticIndexer;
 exports.resolveIndexOptions = indexer.resolveClOptions;
-var Logger = require('lib/cheap-logger.js').Logger;
+var Logger = require(path.resolve(__dirname,'lib/cheap-logger.js')).Logger;
 exports.logger=new Logger();
 exports.optimist = require('optimist');
