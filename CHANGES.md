@@ -1,3 +1,7 @@
+# v0.5.0
+  * new cheap-logger
+  * preprocess gets json from config.json
+
 # v0.4.3
   * Bug if infile list ends in comma, drill finds random files from null "directory".
 

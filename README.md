@@ -81,7 +81,7 @@ Some JSON tweaks are provided using the config file ````input```` property:
 
 #### input-config
 
-  * ````preProcess````: modify the JSON object in any way and return the JSON result
+  * ````preProcess````: modify the JSON object (config.json) in any way
   * ````promote````: move a nested element/object-property to be a top level object property
   * ````delete````: remove unneeded properties from the resulting JSON
   * ````rename````: rename property keys in the JSON

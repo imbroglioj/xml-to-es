@@ -20,6 +20,7 @@
 module.exports = {
     input : {
         preProcess: function(json, config, cb){
+            var json=config.json;
             //console.log("preProcess: Processing file:"+config.input.currentFile);
             if (json.reuters && Object.keys(json).length===1) json=json.reuters;
             return cb ? setImmediate(cb,json) : json;
