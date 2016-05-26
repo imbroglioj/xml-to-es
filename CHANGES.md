@@ -1,3 +1,6 @@
+# v0.5.1
+  * updated superagent to 1.8.3
+
 # v0.5.0
   * new cheap-logger
   * preprocess gets json from config.json

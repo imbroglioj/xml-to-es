@@ -2,20 +2,18 @@
     "doc":{
         "dynamic":false,
         "properties": {        
-            "_id" : {"type":"string","index" : "not_analyzed", "store": false },
-            "_timestamp": {"enabled":true},
             "meta_":{
                 "dynamic":false,
                 "properties":{
                     "*" :{"type":"string", "index":"no"}
                 }},
             "date" : {"type":"date", "format":"dd-MMM-yyyy HH:mm:ss.SS", "ignore_malformed":true}, 
-            "body" :{"type":"string", "index":"analyzed", "index_analyzer": "standard"},
-            "title" :{"type":"string", "index":"analyzed", "index_analyzer": "standard"},
+            "body" :{"type":"string"},
+            "title" :{"type":"string"},
             "id":{"type":"string", "index":"not_analyzed"},
-            "places":{"type":"string", "index":"analyzed",  "index_analyzer": "standard"},
-            "people":{"type":"string", "index":"analyzed",  "index_analyzer": "standard"},
-            "companies":{"type":"string", "index":"analyzed", "index_analyzer": "standard"},
+            "places":{"type":"string"},
+            "people":{"type":"string"},
+            "companies":{"type":"string"},
             "*" :{"type":"string", "index":"no"}
         }
     }
