@@ -1,3 +1,6 @@
+# v0.5.2
+  * handle file containing multiple html files
+
 # v0.5.1
   * updated superagent to 1.8.3
 
