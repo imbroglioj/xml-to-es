@@ -36,7 +36,7 @@ describe("Index tests (results not valid if ES not running)", function () {
     }
     // is there a dynamic way to get mocha to skip tests?
     checkES(function(err){
-        if (err) expect.true.to.be(false);
+        if (err) true.should.eql(false);
         if (!err) {
             IndexSpecPage = require('./IndexSpecPage.js').IndexSpecPage,
                 page = new IndexSpecPage(core, path, should);
