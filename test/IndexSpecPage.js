@@ -73,14 +73,14 @@ exports.IndexSpecPage = function (core, path, should) {
         if (files && files.length) files.forEach(function (f) {
           fs.unlinkSync(path.join(indexDir, f));
         })
-        doFile();
+        doFile(done);
       });
     } else {
       fs.mkdirSync(indexDir);
-      doFile();
+      doFile(done);
     }
 
-    function doFile() {
+    function doFile(cb) {
       var config = filePage.makeJsonConfig(filePage.goodTags,
         {input: {fileExt: '.sgm'}, output: {destDir: indexDir, docsPerFile: 0}});
       core.resolveIndexOptions({
@@ -92,10 +92,10 @@ exports.IndexSpecPage = function (core, path, should) {
       // get updated config
       config = config.indexer.getConfig();
       config.indexer.deleteIndex(config.index.makeUrl(config.index.name), function (err) {
-        if (err) return true.should.be.false();
+        should.not.exist(err);
 
         new core.Parser(config).processFiles(function (err) {
-          if (err) return done ? done() : null;
+          should.not.exist(err);
           config.indexer.putMapping(config.index.name, function (e) {
             should.not.exist(e);
             // give time to make sure parser write is done. todo: making writestream async is tough, but try it.
@@ -106,7 +106,7 @@ exports.IndexSpecPage = function (core, path, should) {
                 should.exist(json);
                 should.exist(json.count);
                 json.count.should.be.greaterThan(0);
-                config.indexer.deleteIndex(config.index.makeUrl(config.index.name), done);
+                config.indexer.deleteIndex(config.index.makeUrl(config.index.name), cb);
               });
             });
           });
