@@ -1,3 +1,6 @@
+# v0.5.7
+  * clean up error messages.
+
 # v0.5.6
   * clean up checkStart
 
