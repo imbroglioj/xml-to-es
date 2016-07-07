@@ -1,3 +1,6 @@
+# v0.5.8
+  * cheap-logger fix
+
 # v0.5.7
   * clean up error messages.
 
