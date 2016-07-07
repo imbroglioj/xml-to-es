@@ -1,3 +1,6 @@
+# v0.5.4
+  * typo fix (log->logger)
+
 # v0.5.3
   * handle case where input is empty (xml translation problem?)
   * handle preprocess returning error in callback
