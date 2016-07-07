@@ -1,3 +1,6 @@
+# v0.5.5
+  * logic for input.resume
+
 # v0.5.4
   * typo fix (log->logger)
 
