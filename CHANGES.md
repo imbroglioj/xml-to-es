@@ -1,3 +1,6 @@
+# v0.5.6
+  * clean up checkStart
+
 # v0.5.5
   * logic for input.resume
 
