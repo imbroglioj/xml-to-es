@@ -1,3 +1,7 @@
+# v0.5.3
+  * handle case where input is empty (xml translation problem?)
+  * handle preprocess returning error in callback
+
 # v0.5.2
   * handle file containing multiple html files
 
