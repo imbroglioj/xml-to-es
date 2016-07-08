@@ -1,3 +1,6 @@
+# v0.5.10
+  * destroy stream on error
+
 # v0.5.9
   * on error processing for stream
 
