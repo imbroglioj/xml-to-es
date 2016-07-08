@@ -1,3 +1,6 @@
+# v0.5.9
+  * on error processing for stream
+
 # v0.5.8
   * cheap-logger fix
 
