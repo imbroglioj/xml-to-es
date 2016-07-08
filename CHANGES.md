@@ -1,3 +1,8 @@
+# v0.5.11
+  * avoid double call of getonefile
+  * make getonefile artificially wait til processing can be assumed done before going on
+  * correct errors in bad xml doc start
+
 # v0.5.10
   * destroy stream on error
 
