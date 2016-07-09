@@ -24,6 +24,7 @@ exports.FileSpecPage = function (core, path, should) {
   self.goodTags = goodTags;
   self.goodTagsgz = goodTagsgz;
   self.badTags = badTags;
+  var fileext;
   self.makeJsonConfig = function (filename, overrides) {
     if (typeof overrides === 'string') {
       fileext = overrides;

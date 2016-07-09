@@ -20,6 +20,7 @@ var config = require('./lewis-input-config.js')
 config.output = {
     fmt: "JSON",
     fileExt: ".json",
+    filePrefix:"spec",
     destDir: "./json",
     docsPerFile: 1,
     leadChar : '[', // for aggregating

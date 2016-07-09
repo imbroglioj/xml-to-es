@@ -57,8 +57,8 @@ exports.IndexSpecPage = function (core, path, should) {
     // get updated config
     config = config.indexer.getConfig();
     config.indexer.deleteIndex(config.index.makeUrl(config.index.name), function (err) {
-      if (err) return true.should.be.false();
-
+      should.not.exist(err);
+      config.input.currentFile="";
       new core.Parser(config).processFiles(done);
     });
   };
@@ -93,7 +93,8 @@ exports.IndexSpecPage = function (core, path, should) {
       config = config.indexer.getConfig();
       config.indexer.deleteIndex(config.index.makeUrl(config.index.name), function (err) {
         should.not.exist(err);
-
+        config.input.currentFile="";
+        config.output.filePrefix="spec";
         new core.Parser(config).processFiles(function (err) {
           should.not.exist(err);
           config.indexer.putMapping(config.index.name, function (e) {
