@@ -1,3 +1,6 @@
+# v0.5.13
+  * handling timing issues
+
 # v0.5.12
   * improve info message
 
