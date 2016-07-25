@@ -1,3 +1,6 @@
+# v0.6.0
+  refactored to move all anomaly handling into the doOneFile file splitter
+
 # v0.5.13,14
   * handling timing issues
 
