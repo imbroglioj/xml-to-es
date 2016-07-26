@@ -1,5 +1,8 @@
+# v0.6.1
+  * fixed bug that xml not cleared when processed
+
 # v0.6.0
-  refactored to move all anomaly handling into the doOneFile file splitter
+  * refactored to move all anomaly handling into the doOneFile file splitter
 
 # v0.5.13,14
   * handling timing issues
