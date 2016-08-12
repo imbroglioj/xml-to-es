@@ -29,7 +29,7 @@ config.output = {
         },
         fn: function (json, cb) {
             if (json == ':done') {
-                config.logger.info("Indexing Done");
+                config.log.info("Indexing Done");
                 return cb ? cb() : null;
             }
 
@@ -40,7 +40,7 @@ config.output = {
             if (!doneOne && config.index.clean) {
                 config.indexer.deleteIndex(config.index.url + '/' + config.index.type,
                     function (err) {
-                        if (err) config.logger.warn("Error deleting old index: ", err);
+                        if (err) config.log.warn("Error deleting old index: ", err);
                         indexit();
                     })
             } else indexit();

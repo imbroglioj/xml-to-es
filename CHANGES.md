@@ -1,3 +1,6 @@
+# v0.6.2
+  * bunyan for logging
+
 # v0.6.1
   * fixed bug that xml not cleared when processed
 

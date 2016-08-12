@@ -13,7 +13,7 @@ var should = require('chai').should()
 
 describe("html tests", function () {
     var page= new Page(core, path, should);
-    core.logger.info("FileSpec: "+new Date());
+    core.log.info("FileSpec: "+new Date());
     it('should handle one doc', function () {
         page.testSimpleHtmlConfig();
     });

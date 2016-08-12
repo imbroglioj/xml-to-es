@@ -13,11 +13,11 @@ var should = require('chai').should()
 var IndexSpecPage, page;
 
 process.on('uncaughtException', function(err){
-    core.logger.error("uncaughtException -- ", err);
+    core.log.error("uncaughtException -- ", err);
 });
 
 describe("Index tests (results not valid if ES not running)", function () {
-    core.logger.info("indexSpec: "+new Date());
+    core.log.info("indexSpec: "+new Date());
     var noES;
 
     // have to call this every time since async
@@ -28,7 +28,7 @@ describe("Index tests (results not valid if ES not running)", function () {
             .end(function(err, res){
                 if (err || !res.ok) {
                     noES = true;
-                    core.logger.warn("*** Will skip index test because ElasticSearch not running at localhost:9200 ***");
+                    core.log.warn("*** Will skip index test because ElasticSearch not running at localhost:9200 ***");
                     return cb(err);
                 }
                 cb();

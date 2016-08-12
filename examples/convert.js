@@ -8,13 +8,13 @@
 var path = require('path'),
 // CHANGE next item to require('xml-to-es') if you copy file to another directory and xml-to-es is in node_modules
     core = require(path.resolve(__dirname,'../index.js')),
-    logger = core.logger,
+    log = core.log,
     fs = require('fs'),
     util = require('util')
     ;
 
 process.on('uncaughtException', function (err) {
-    logger.error("Uncaught error: " + util.inspect(err, {depth: null}) +
+    log.error("Uncaught error: " + util.inspect(err, {depth: null}) +
     err.stack ? err.stack : '-- no stack');
 });
 
