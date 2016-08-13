@@ -1,3 +1,6 @@
+# v0.6.3
+  * fixed looping search for start of doc when end not found (very large docs)
+
 # v0.6.2
   * bunyan for logging
 
