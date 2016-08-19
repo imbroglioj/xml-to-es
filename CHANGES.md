@@ -1,3 +1,6 @@
+# v0.6.4
+  * avoid xxx..html (double dot)
+
 # v0.6.3
   * fixed looping search for start of doc when end not found (very large docs)
 
