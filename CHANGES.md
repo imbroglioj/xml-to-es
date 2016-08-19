@@ -1,3 +1,6 @@
+# v0.6.5
+  * compatibility with ancient versions of node
+
 # v0.6.4
   * avoid xxx..html (double dot)
 
