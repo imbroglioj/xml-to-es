@@ -1,4 +1,4 @@
-# NOTE: I now recommend [fast-xml2js](github.com/codyrigney92/fast-xml2js).
+# NOTE: I recommend [fast-xml2js](github.com/codyrigney92/fast-xml2js) in place of this project.
 
 It performs well and is extremely convenient to use for the xml-to-json conversion.
 
