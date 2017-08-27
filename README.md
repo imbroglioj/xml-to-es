@@ -1,3 +1,7 @@
+# NOTE: I now recommend [fast-xml2js](github.com/codyrigney92/fast-xml2js).
+
+It performs well and is extremely convenient to use for the xml-to-json conversion.
+
 # xml-to-es
 
 ````xml-to-es```` was originally written to translate [David Lewis's Reuters collection in SGML](http://www.daviddlewis
